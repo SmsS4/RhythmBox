@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-05-07T14:06:27.556Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" etag="hnBKtMXHOjJ0FKX5IOyo" version="14.5.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-05-07T14:16:49.478Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" etag="NBY47lkb1W2YbVHfRAOD" version="14.5.4" type="github">
   <diagram id="JMSu3cJSi2hTwxDdmqPx" name="Page-1">
-    <mxGraphModel dx="1888" dy="1648" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2926" dy="2196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -43,9 +43,6 @@
         <mxCell id="86rAmTIcKEt4U7-xHO8E-3" value="Publisher" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
           <mxGeometry y="720" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-76" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-4" target="86rAmTIcKEt4U7-xHO8E-74">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-4" value="Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="380" y="680" width="120" height="80" as="geometry" />
         </mxCell>
@@ -64,7 +61,7 @@
         <mxCell id="86rAmTIcKEt4U7-xHO8E-29" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-16" target="86rAmTIcKEt4U7-xHO8E-28">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-16" value="Add PlayList" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-16" value="Manage PlayList" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="410" y="80" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-25" value="Add music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -73,7 +70,7 @@
         <mxCell id="86rAmTIcKEt4U7-xHO8E-28" value="Remove music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="620" y="150" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-30" value="Remove PlayList" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-30" value="Add/Remove PlayList" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="410" y="230" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-34">
@@ -84,23 +81,26 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-37" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-36">
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-68" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-67">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-68" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-67">
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-80" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-82" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-32" target="86rAmTIcKEt4U7-xHO8E-81">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-32" value="Play Music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="410" y="360" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-34" value="Resume and Stop Music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="860" y="220" width="120" height="80" as="geometry" />
+          <mxGeometry x="1050" y="150" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-39" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-36" target="86rAmTIcKEt4U7-xHO8E-38">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-36" value="Skip Music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="940" y="360" width="120" height="80" as="geometry" />
+          <mxGeometry x="920" y="560" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-38" value="Checks account type" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1155" y="360" width="120" height="80" as="geometry" />
@@ -114,7 +114,13 @@
         <mxCell id="86rAmTIcKEt4U7-xHO8E-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-41" target="86rAmTIcKEt4U7-xHO8E-32">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-41" value="Play Song from playlist" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-84" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-41" target="86rAmTIcKEt4U7-xHO8E-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-85" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-41" target="86rAmTIcKEt4U7-xHO8E-83">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-41" value="Play Music from playlist" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="490" y="500" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-49" target="86rAmTIcKEt4U7-xHO8E-16">
@@ -151,19 +157,28 @@
           <mxGeometry x="130" y="260" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-67" value="Select Quality&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="870" y="460" width="120" height="80" as="geometry" />
+          <mxGeometry x="940" y="320" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-69" value="Add song" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="360" y="790" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-71" target="86rAmTIcKEt4U7-xHO8E-74">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="86rAmTIcKEt4U7-xHO8E-71" value="Register&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="380" y="590" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="86rAmTIcKEt4U7-xHO8E-74" value="Database" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="710" y="630" width="30" height="60" as="geometry" />
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-79" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-78" target="86rAmTIcKEt4U7-xHO8E-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-78" value="Download" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-81" value="FastForward/Rewind music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="230" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-86" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="86rAmTIcKEt4U7-xHO8E-83" target="86rAmTIcKEt4U7-xHO8E-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86rAmTIcKEt4U7-xHO8E-83" value="Go to music" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="870" y="650" width="120" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
