@@ -1,2 +1,2 @@
 [pylint]
-disable=too-few-public-methods,bad-continuation,subprocess-run-check,duplicate-code,too-many-function-args,unexpected-keyword-arg,too-many-ancestors,no-member,missing-module-docstring,invalid-name,consider-using-enumerate,too-many-instance-attributes,too-many-arguments,no-self-use,wrong-import-position,wrong-import-order,unused-import,import-error,too-many-instance-attributes,missing-function-docstring,fixme
+disable=too-few-public-methods,bad-continuation,invalid-name,no-self-use,fixme
