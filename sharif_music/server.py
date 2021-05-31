@@ -6,7 +6,9 @@ class Server:
     def __init__(self, db: DB):
         self.__db = db
 
-    def create_account(self, username: str, password: str, phone: str, name: str) -> bool:
+    def create_account(
+        self, username: str, password: str, phone: str, name: str
+    ) -> bool:
         raise NotImplementedError()
 
     def login(self, username: str, password: str) -> str:
@@ -36,10 +38,14 @@ class Server:
     def add_owner_to_playlist(self, uid: str, username: str) -> bool:
         raise NotImplementedError()
 
-    def add_music_to_playlist(self, token: str, playlist_uid: str, music_uid: str) -> bool:
+    def add_music_to_playlist(
+        self, token: str, playlist_uid: str, music_uid: str
+    ) -> bool:
         raise NotImplementedError()
 
-    def remove_music_from_playlist(self, token: str, playlist_uid: str, music_uid:str) -> bool:
+    def remove_music_from_playlist(
+        self, token: str, playlist_uid: str, music_uid: str
+    ) -> bool:
         raise NotImplementedError()
 
     def get_default_playlist(self, token: str) -> PlayList:

@@ -8,9 +8,11 @@ class AccountType(enum.IntEnum):
     FREE = 1
     PREMIUM = 2
 
+
 class Quality(enum.IntEnum):
     Q128 = 128
     Q320 = 320
+
 
 @dataclass
 class Music:
@@ -35,4 +37,3 @@ class PlayList:
     musics: List[Music]
     name: str
     owners: List[str]
-
