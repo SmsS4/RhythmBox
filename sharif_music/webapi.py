@@ -39,8 +39,10 @@ class Api:
 
     def add_music_to_playlist(
         self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool:
-        return self.__server.add_music_to_playlist(token, playlist_uid, music_uid)
+    ) ->\
+            bool:
+        return self.__server\
+            .add_music_to_playlist(token, playlist_uid, music_uid)
 
     def remove_music_from_playlist(
         self, token: str, playlist_uid: str, music_uid
