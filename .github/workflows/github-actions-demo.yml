@@ -4,20 +4,27 @@ jobs:
   Pylint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
       - run: pip install pylint  # -r requirements.txt
       - run: pylint **/*.py
   Black:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
       - uses: psf/black@stable
   Pytype:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
       - run: pip install pytype
       - run: pytype **/*.py
+  Mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+      - run: pip install mypy
+      - run: mypy **/*.py
