@@ -3,6 +3,7 @@ from sharif_music.db_wrapper import DB
 from sharif_music.models import *
 from typing import List
 
+
 class Server:
     def __init__(self, db: DB):
         self.__db = db
