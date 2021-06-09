@@ -12,6 +12,8 @@ Jinja2==3.0.1
 lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
 mccabe==0.6.1
+mypy==0.901
+mypy-extensions==0.4.3
 networkx==2.5.1
 ninja==1.10.0.post2
 py2puml==0.4.0

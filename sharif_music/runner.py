@@ -1,7 +1,7 @@
 """
 This class runs server and api
 """
-import uvicorn
+import uvicorn # type: ignore
 
 from sharif_music.db_wrapper import DB
 from sharif_music.server import Server
