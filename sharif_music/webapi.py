@@ -38,7 +38,7 @@ def init_api(server: Server) -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    os.chdir("/home/smss/work/Sharifmusic/ui")
+    os.chdir("/web_ui")
     api.mount("/static", StaticFiles(directory="static"), name="static")
 
     templates = Jinja2Templates(directory="templates")
