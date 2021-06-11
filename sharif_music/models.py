@@ -24,13 +24,14 @@ class Music:
 
 @dataclass
 class Account:
+    id: int
     username: str
     password: str
     name: str
     phone: str
     account_type: AccountType
     publisher: bool
-
+    photo_url: str
 
 @dataclass
 class PlayList:
