@@ -1,15 +1,16 @@
 # pylint: skip-file
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Dict
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi import Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import StreamingResponse
 
-from sharif_music.models import Music, Quality, PlayList
+from sharif_music.models import Music, Quality, PlayList, WebResult
 from sharif_music.server import Server
 
 
@@ -38,10 +39,33 @@ def init_api(server: Server) -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    os.chdir("/web_ui")
+    os.chdir("../web_ui")
     api.mount("/static", StaticFiles(directory="static"), name="static")
 
     templates = Jinja2Templates(directory="templates")
+
+    # @api.exception_handler(HTTPException)
+    # def validation_exception_handler(request, exc):
+    #     print(request)
+    #     return templates.TemplateResponse("not_found.html", {"request": request})
+
+    @api.get("/music/{music_id}", )
+    def get_music(music_id: str):
+        file_like = open("/home/smss/Downloads/Telegram Desktop/wires.mp3", mode="rb")
+        return StreamingResponse(file_like, media_type="audio/mp3")
+
+    @api.get("/platform", response_class=HTMLResponse)
+    def platform(request: Request, string: Optional[str]):
+        return templates.TemplateResponse("platform.html", {"request": request, "string":string})
+
+    @api.get("/search")
+    def search(string: str) -> Dict[str, List[WebResult]]:
+        result = {
+            'artists': Api.server.search_artists(string),
+            'musics': Api.server.search_musics(string),
+            'playlists': Api.server.search_playlists(string)
+        }
+        return result
 
     @api.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
@@ -53,10 +77,10 @@ def init_api(server: Server) -> FastAPI:
 
     @api.post("/register")
     def register(
-        username: str = Form(...),
-        password: str = Form(...),
-        phone: str = Form(...),
-        name: str = Form(...),
+            username: str = Form(...),
+            password: str = Form(...),
+            phone: str = Form(...),
+            name: str = Form(...),
     ) -> Tuple[str, bool]:
         return Api.server.create_account(username, password, phone, name)
 

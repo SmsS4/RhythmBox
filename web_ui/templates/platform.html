@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/platform.css') }}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="main"></div>
+
+    <div class="container float-left" id="search-result">
+
+      <!--search bar-->
+      <div>
+        <input type="text" placeholder="Search.." class="searchbar" id="search-input" value="{{ string }}">
+        <button class="search_icon" onclick="search()">Search</button>
+      </div>
+        <ul class="list-group" id="search-result-list">
+          <li class="list-group-item">First item</li>
+          <li class="list-group-item">Second item</li>
+          <li class="list-group-item">Third item</li>
+        </ul>
+    </div>
+
+    <div class="container float-right" id="audio-player-container">
+        <p id="title">Rhythm Player</p>
+        <audio id="player" src=""></audio>
+          <div>
+            <img class="icon" src="{{ url_for('static', path='/images/play.png') }}" id="play" onclick="document.getElementById('player').play()"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/pause.png') }}" id="pause" onclick="document.getElementById('player').pause()"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/vol_up.png') }}" id="volup" onclick="document.getElementById('player').volume += 0.1"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/vol_down.png') }}" id="voldown" onclick="document.getElementById('player').volume -= 0.1"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/download.png') }}" id="download" onclick="downloadmusic()"></img>
+          </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/toasty.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/toasty.js"></script>
+    <script src="{{ url_for('static', path='/platform.js') }}"></script>
+
+</body>
+</html>

@@ -28,10 +28,12 @@ class Account:
     username: str
     password: str
     name: str
-    phone: str
     account_type: AccountType
     publisher: bool
     photo_url: str
+    description: str
+    email: str
+
 
 @dataclass
 class PlayList:
@@ -39,3 +41,13 @@ class PlayList:
     musics: List[Music]
     name: str
     owners: List[str]
+
+
+@dataclass
+class WebResult:
+    id: int
+    name: str
+
+class PublisherWeb(WebResult):pass
+class MusicWeb(WebResult):pass
+class PlaylistWeb(WebResult):pass

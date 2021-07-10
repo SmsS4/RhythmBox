@@ -1,3 +1,5 @@
+base = "http://0.0.0.0:7000/"
+
 
 var options = {
     autoClose: true,
@@ -17,7 +19,6 @@ var options = {
 var toast = new Toasty(options);
 toast.configure(options);
 console.log("hey")
-base = "http://0.0.0.0:8000/"
 
 
 function logout() {
@@ -25,17 +26,32 @@ function logout() {
     window.location.href = base;
 }
 
-function init(token) {
+function checkToken(token){
     if (token == null) {
         console.log("token is null");
+        return false
+    }
+    return true
+}
+
+function init(token) {
+    if (!checkToken(token)){
+        $("#if_login").hide()
+        $("#if_not_login").show()
         return
     }
     console.log(token);
     username = localStorage.getItem('username')
     $("#user").replaceWith('<a class="nav-link" href="/profile/' + username + '" id="user" >Profile</a>')
     $("#logout").show()
+    $("#if_login").show()
+    $("#if_not_login").hide()
 }
 
+function search() {
+    console.log($("#search_input").val());
+    window.location.href = base+"platform?string=" + $("#search_input").val();
+}
 
 
 function register() {
@@ -111,6 +127,11 @@ $(document).ready(function(){
 
     $("#logout").hide()
 
+    $("#search_input").on('keypress',function(e) {
+        if(e.which == 13) {
+            search();
+        }
+    })
 
     //success toast
 
@@ -143,7 +164,7 @@ $(document).ready(function(){
 
 
 //    this is animation to scroll to section for nav bar buttons
-  buttons = ["#homebutton", "#contactus", "#staffbutton"]
+  buttons = ["#homebutton", "#contactus", "#staffbutton", "#feautresbutton"]
   for(var i = 0; i < buttons.length; i++){
       $(buttons[i]).click(function(e) {
         e.preventDefault();
@@ -153,8 +174,6 @@ $(document).ready(function(){
       });
 
     }
-
-
     init(localStorage.getItem("token"));
 });
 

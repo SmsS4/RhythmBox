@@ -5,8 +5,9 @@
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 <!--                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">-->
+         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/main.css') }}">
-        <title>SharifMusic</title>
+        <title>RhythmBox</title>
         <meta charset="utf-8">
 
     </head>
@@ -31,13 +32,16 @@
                         <a class="nav-link" href="" id="user" data-toggle="modal" data-target="#loginModal">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#header" id="homebutton">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#staffs" id="staffbutton">Staff</a>
+                        <a class="nav-link" href="#staffs" id="staffbutton">Our Team</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#aboutus" id="contactus">Contact</a>
+                    </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#feautres" id="feautresbutton">Feautres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#header" id="homebutton">Home</a>
                     </li>
                 </ul>
             </div>
@@ -59,31 +63,127 @@
 <!--    </div>-->
 
 <!--    the description in the middle of page-->
-    <div class="description">
-        <h1>Welcome to the SharifMusic :)</h1>
+    <div class="description" id="if_not_login">
+        <h1>Welcome to the RhythmBox :)</h1>
         <p>blah blah some information about sharif music</p>
         <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#loginModal">Login</button>
-
         <button class="btn btn-outline-secondary btn-lg" data-toggle="modal" data-target="#registerModal">Register</button>
+    </div>
 
+    <div class="description" id="if_login">
+        <h1>RhythmBox :D</h1>
+        <div class="container h-100">
+          <div class="d-flex justify-content-center h-100">
+            <div class="searchbar">
+              <input class="search_input" type="text" name="" placeholder="Search..." id="search_input">
+              <span onclick="search()" class="search_icon"><i class="fas fa-search"></i></span>
+            </div>
+          </div>
+        </div>
     </div>
 
 
+<!--    features-->
+
+        <div class="features_background"><br>
+                    <div class="overlay"></div>
+
+  <div class="container" id="feautres">
+    <!-- Row  -->
+    <div class="row">
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img src="{{ url_for('static', path='/images/listen.gif') }}"/></div>
+            <h6 class="font-weight-medium">Listen to music</h6>
+          </div>
+        </div>
+      </div>
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img src="{{ url_for('static', path='/images/search.gif') }}"/></div>
+            <h6 class="font-weight-medium">Search musics and public playlists</h6>
+          </div>
+        </div>
+      </div>
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img src="{{ url_for('static', path='/images/playlist.gif') }}"/></div>
+            <h6 class="font-weight-medium">Create and manage playlist</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+      <div class="row">
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img alt="svgImg" src="{{ url_for('static', path='/images/download.gif') }}"/></div>
+            <h6 class="font-weight-medium">Download musics</h6>
+          </div>
+        </div>
+      </div>
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img alt="svgImg" src="{{ url_for('static', path='/images/share.gif') }}"/></div>
+            <h6 class="font-weight-medium">Share your playlists</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column -->
+      <div class="col-md-4 wrap-service1-box">
+        <div class="card border-0 card-shadow mb-4">
+          <div class="card-body text-center">
+            <div class="my-3"><img alt="svgImg" src="{{ url_for('static', path='/images/follow.gif') }}"/></div>
+            <h6 class="font-weight-medium">Follow artist</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!--        these are staff-->
-    <div class="background" id="staffs">
+    <div class="background anbg" id="staffs">
+                            <div class="overlay"></div>
+
         <div class="container team">
             <div class="row">
-                <div class="card col-lg-3 col-md-3 col-sm-4 text-center">
-                        <img class="card-img-top rounded-circle" src="{{ url_for('static', path='/images/smss.jpg') }}" alt="Card image">
+                <div class="card col-lg-4 col-md-3 col-sm-3 text-center">
+                        <img class="card-img-top rounded-circle" src="{{ url_for('static', path='/images/smss2.png') }}" alt="Card image">
                         <div class="card-body">
                             <h4 class="card-title">SeyedMahdi SadeghShobeir</h4>
-                            <p class="card-text">Manager</p>
+                            <p class="card-text">Product Manager</p>
                         </div>
+                </div>
+                <div class="card col-lg-4 col-md-3 col-sm-3 text-center">
+                        <img class="card-img-top rounded-circle" src="{{ url_for('static', path='/images/hamid.jpg') }}" alt="Card image">
+                        <div class="card-body">
+                            <h4 class="card-title">HamidReza Kamkari</h4>
+                            <p class="card-text">Process Manager</p>
+                        </div>
+                </div>
+                <div class="card col-lg-4 col-md-3 col-sm-3 text-center">
+                    <img class="card-img-top rounded-circle" src="{{ url_for('static', path='/images/sasa.jpg') }}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">Mohammad Saneyian</h4>
+                        <p class="card-text">CTO</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <footer class="page-footer" id="aboutus">
         <div class="container">
@@ -99,10 +199,11 @@
                 <br/>+ 98 921 2131 238</p>
             </div>
         <div>
-        <div class="footer-copyright text-center">© 2021 Copyright: SharifMusic</div>
+        <div class="footer-copyright text-center">© 2021 Copyright: RhythmBox</div>
     </footer>
 
 <!--    this is login modal-->
+
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <div class="modal-dialog" role="document">

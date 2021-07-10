@@ -11,6 +11,10 @@ class Server:
         self.__db = db
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
+        self.__fetch_init_data_from_db()
+
+    def __fetch_init_data_from_db(self):
+        pass
 
     def get_account_by_username(self, username: str) -> Optional[Account]:
         for account in self.accounts:
@@ -31,7 +35,6 @@ class Server:
             username=username,
             password=password,
             name=name,
-            phone=phone,
             account_type=AccountType.FREE,
             publisher=False,
         )
@@ -86,3 +89,20 @@ class Server:
 
     def follow_artis(self, token: str, artist: str) -> bool:
         raise NotImplementedError()
+
+    def search_artists(self, string:str) -> List[PublisherWeb]:
+        return [
+            PublisherWeb(41234, 'AghaSadegh')
+        ]
+    def search_musics(self, string:str) -> List[MusicWeb]:
+        return [
+            MusicWeb(5, 'wires'),
+            MusicWeb(2, 'not wires'),
+        ]
+
+    def search_playlists(self, string: str) -> List[PlaylistWeb]:
+        return [
+            PlaylistWeb(1, 'musics 2'),
+            PlaylistWeb(1, 'musics 5'),
+            PlaylistWeb(1, 'musics 1'),
+        ]
