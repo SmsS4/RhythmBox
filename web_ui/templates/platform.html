@@ -29,9 +29,14 @@
           <div>
             <img class="icon" src="{{ url_for('static', path='/images/play.png') }}" id="play" onclick="document.getElementById('player').play()"></img>
             <img class="icon" src="{{ url_for('static', path='/images/pause.png') }}" id="pause" onclick="document.getElementById('player').pause()"></img>
-            <img class="icon" src="{{ url_for('static', path='/images/vol_up.png') }}" id="volup" onclick="document.getElementById('player').volume += 0.1"></img>
-            <img class="icon" src="{{ url_for('static', path='/images/vol_down.png') }}" id="voldown" onclick="document.getElementById('player').volume -= 0.1"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/vol_up.png') }}" id="volup" onclick="document.getElementById('player').volume += 0.1; $('#vol_bar').width(document.getElementById('player').volume*100+'%');"></img>
+            <img class="icon" src="{{ url_for('static', path='/images/vol_down.png') }}" id="voldown" onclick="document.getElementById('player').volume -= 0.1; $('#vol_bar').width(document.getElementById('player').volume*100+'%');"></img>
             <img class="icon" src="{{ url_for('static', path='/images/download.png') }}" id="download" onclick="downloadmusic()"></img>
+<!--            <progress id="vol" value="1" max="1" class="pbar"></progress>-->
+              Volume
+              <div class="bbar" style="width: 30%">
+                  <div id="vol_bar" class="progressbar"></div>
+              </div>
           </div>
     </div>
 

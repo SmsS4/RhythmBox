@@ -1,6 +1,9 @@
 # pylint: skip-file
 import uuid
 
+from fastapi import UploadFile
+
+from sharif_music import utils
 from sharif_music.db_wrapper import DB
 from sharif_music.models import *
 from typing import List, Optional, Dict, Tuple
@@ -9,16 +12,38 @@ from typing import List, Optional, Dict, Tuple
 class Server:
     def __init__(self, db: DB):
         self.__db = db
+        self.files: Dict[int, File] = {}
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
+        #########
+        # remove
+        self.accounts.append(
+            Account(
+                id=1,
+                username='test',
+                password='test',
+                name='name',
+                account_type=AccountType.PREMIUM,
+                publisher=True,
+                photo=None,
+                description='description',
+                email='smss@chmail.ir'
+            )
+        )
+        #########
         self.__fetch_init_data_from_db()
 
+    def get_file_path(self, file_id: int) -> File:
+        return self.files[file_id]
+
     def __fetch_init_data_from_db(self):
-        pass
+        """
+        Gets data from db
+        """
+        # todo
 
     def get_account_by_username(self, username: str) -> Optional[Account]:
         for account in self.accounts:
-            print(username, account.username)
             if account.username == username:
                 return account
         return None
@@ -27,20 +52,56 @@ class Server:
         return self.token_to_account.get(token, None)
 
     def create_account(
-        self, username: str, password: str, phone: str, name: str
+            self, username: str, password: str, email: str, name: str
     ) -> Tuple[str, bool]:
         if self.get_account_by_username(username):
             return "Username already taken", False
         account = Account(
+            id=utils.gen_id(),
             username=username,
             password=password,
             name=name,
             account_type=AccountType.FREE,
             publisher=False,
+            photo=None,
+            description='',
+            email=email,
         )
         self.accounts.append(account)
-        # self.__db.insert_account(account)
+        # self.__db.insert_account(account) todo
         return "Register successfully. Welcome to SharifMusic", True
+
+    BASE = "/var/tmp/"
+
+    def get_photo(self, url: str):
+        return open(f"{self.BASE}{url}", "r")
+
+    def add_file(self, file: File) -> None:
+        self.files[file.id] = file
+        # Todo add file to db
+
+    def upload_file(self, uploaded_file: UploadFile) -> File:
+        file_id = utils.gen_id()
+        path = f"{self.BASE}{file_id}"
+        file = File(
+            id=utils.gen_id(),
+            mime=uploaded_file.content_type,
+            path=path,
+        )
+        with open(path, "wb") as f:
+            f.write(uploaded_file.file.read())
+        self.add_file(file)
+        return file
+
+    def update_account(self, account: Account):
+        # todo update db
+        pass
+
+    def change_photo(self, token: str, uploaded_file: UploadFile) -> int:
+        user = self.get_account_by_token(token)
+        user.photo = self.upload_file(uploaded_file)
+        self.update_account(user)
+        return 1
 
     def login(self, username: str, password: str) -> str:
         token = str(int(uuid.uuid1()))
@@ -56,13 +117,20 @@ class Server:
     def make_premium(self, token: str) -> bool:
         raise NotImplementedError()
 
-    def add_music(self, token: str, music: Music) -> bool:
-        raise NotImplementedError()
+    def add_music(self, token: str, name:str, uploaded_file: UploadFile) -> bool:
+        user = self.get_account_by_token(token)
+        if not user.publisher:
+            return False
+        file = self.upload_file(uploaded_file)
+        print(name)
+        # todo add music to db
+        print(file)
+        return True
 
     def search_music(self, music_name: str, music_genera: str) -> List[Music]:
         raise NotImplementedError()
 
-    def get_music(self, uid: str, quality: Quality) -> Music:
+    def get_music(self, uid: str) -> Music:
         raise NotImplementedError()
 
     def add_playlist(self, token: str, name: str) -> bool:
@@ -75,12 +143,12 @@ class Server:
         raise NotImplementedError()
 
     def add_music_to_playlist(
-        self, token: str, playlist_uid: str, music_uid: str
+            self, token: str, playlist_uid: str, music_uid: str
     ) -> bool:
         raise NotImplementedError()
 
     def remove_music_from_playlist(
-        self, token: str, playlist_uid: str, music_uid: str
+            self, token: str, playlist_uid: str, music_uid: str
     ) -> bool:
         raise NotImplementedError()
 
@@ -90,15 +158,34 @@ class Server:
     def follow_artis(self, token: str, artist: str) -> bool:
         raise NotImplementedError()
 
-    def search_artists(self, string:str) -> List[PublisherWeb]:
+    def serach(self, token: str, string: str) -> Dict[str, List[WebResult]]:
+        user = self.get_account_by_token(token)
+        result = {
+            'artists': self.search_artists(string),
+            'musics': self.search_musics(string, user.account_type == AccountType.PREMIUM),
+            'playlists': self.search_playlists(string)
+        }
+        return result
+
+    def validate_token(self, token: str) -> bool:
+        return token in self.token_to_account
+
+    def search_artists(self, string: str) -> List[PublisherWeb]:
         return [
             PublisherWeb(41234, 'AghaSadegh')
         ]
-    def search_musics(self, string:str) -> List[MusicWeb]:
-        return [
-            MusicWeb(5, 'wires'),
-            MusicWeb(2, 'not wires'),
-        ]
+
+    def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
+        print(high_quality)
+        if high_quality:
+            return [
+                MusicWeb(5, 'wires', 320),
+                MusicWeb(2, 'not wires', 128),
+            ]
+        else:
+            return [
+                MusicWeb(2, 'not wires', 128),
+            ]
 
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
         return [

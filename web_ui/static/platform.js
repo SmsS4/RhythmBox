@@ -55,8 +55,9 @@ function downloadmusic() {
 
 function search(){
     var string = $("#search-input").val();
+    var token = localStorage.getItem('token');
     console.log(string);
-    $.get('search', {string:string},
+    $.get('search', {token:token, string:string},
         function(data){
             console.log(data);
             var artists = data['artists']
@@ -71,7 +72,7 @@ function search(){
             $('#search-result-list').append('<li class="list-group-item head-list">Musics</li>');
 
             for (var i = 0; i < musics.length; i++){
-                $('#search-result-list').append('<li class="list-group-item clickable" onclick="play_music('+musics[i]["id"]+')">' + musics[i]["name"] + '</li>');
+                $('#search-result-list').append('<li class="list-group-item clickable" onclick="play_music('+musics[i]["id"]+')">' + '<span class="qual">' +  musics[i]["quality"] + '</span>   ' + musics[i]["name"] + '</li>');
             }
             $('#search-result-list').append('<li class="list-group-item head-list">Artists</li>');
             for (var i = 0; i < artists.length; i++){

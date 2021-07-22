@@ -31,7 +31,15 @@ function checkToken(token){
         console.log("token is null");
         return false
     }
-    return true
+    var valid = false;
+    jQuery.ajax({
+        url: 'validate_token'+'?token=' + token,
+        success: function(valdiated) {
+          valid = valdiated;
+        },
+        async:false
+    });
+    return valid
 }
 
 function init(token) {
@@ -57,13 +65,13 @@ function search() {
 function register() {
     username = $("#reg_username").val()
     password = $("#reg_password").val()
-    phone = $("#reg_phone").val()
+    email = $("#reg_email").val()
     name = $("#reg_name").val()
     console.log(username);
     console.log(password);
-    console.log(phone);
+    console.log(email);
     console.log(name);
-    $.post('register', {username:username, password:password, phone:phone, name:name},
+    $.post('register', {username:username, password:password, email:email, name:name},
         function(data){
             console.log(data);
             msg = data[0]
