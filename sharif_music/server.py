@@ -11,12 +11,44 @@ from typing import List, Optional, Dict, Tuple
 
 class Server:
     def __init__(self, db: DB):
+        """
+        Attributes:
+            __db: DB Wrapper
+            files: dict from File.id to file
+            token_to_account: dict from ``login token`` to Account
+            accounts: list of account
+        """
         self.__db = db
         self.files: Dict[int, File] = {}
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
+        self.musics: Dict[str, Music] = {
+            '1': Music(
+                "test",
+                0,
+                "1",
+                File(
+                    0,
+                    "audio/mp3",
+                    "path/to/music"
+                ),
+                128
+            ),
+            '2': Music(
+                "test",
+                0,
+                "2",
+                File(
+                    1,
+                    "audio/mp3",
+                    "path/to/music"
+                ),
+                128
+            )
+        }
         #########
         # remove
+        # inja mitoni account daem ezafe koni
         self.accounts.append(
             Account(
                 id=1,
@@ -28,6 +60,19 @@ class Server:
                 photo=None,
                 description='description',
                 email='smss@chmail.ir'
+            )
+        )
+        self.accounts.append(
+            Account(
+                id=2,
+                username='nottest2',
+                password='nottest2',
+                name='notname',
+                account_type=AccountType.FREE,
+                publisher=False,
+                photo=None,
+                description='notdescription2',
+                email='smss2@chmail.ir'
             )
         )
         #########
@@ -111,8 +156,7 @@ class Server:
         self.token_to_account[token] = account
         return token
 
-    def __get_user_by_token(self, token: str) -> Account:
-        raise NotImplementedError()
+
 
     def make_premium(self, token: str) -> bool:
         raise NotImplementedError()
@@ -133,27 +177,7 @@ class Server:
     def get_music(self, uid: str) -> Music:
         raise NotImplementedError()
 
-    def add_playlist(self, token: str, name: str) -> bool:
-        raise NotImplementedError()
 
-    def get_playlist(self, uid: str) -> PlayList:
-        raise NotImplementedError()
-
-    def add_owner_to_playlist(self, uid: str, username: str) -> bool:
-        raise NotImplementedError()
-
-    def add_music_to_playlist(
-            self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool:
-        raise NotImplementedError()
-
-    def remove_music_from_playlist(
-            self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool:
-        raise NotImplementedError()
-
-    def get_default_playlist(self, token: str) -> PlayList:
-        raise NotImplementedError()
 
     def follow_artis(self, token: str, artist: str) -> bool:
         raise NotImplementedError()
@@ -193,3 +217,71 @@ class Server:
             PlaylistWeb(1, 'musics 5'),
             PlaylistWeb(1, 'musics 1'),
         ]
+
+
+    def add_playlist(self, token: str, name: str) -> bool: # Todo(Hamidreza)
+        """
+        create empty playlist
+
+        Args:
+            token: login token
+            name: name of playlist
+
+        Returns:
+
+        """
+        raise NotImplementedError()
+
+    def get_playlist(self, uid: str) -> PlayList: # Todo(Hamidreza)
+        """
+        get playlist by ui
+        Args:
+            uid: uid of playlist
+
+        Returns:
+
+        """
+        raise NotImplementedError()
+
+    def add_owner_to_playlist(self, uid: str, username: str) -> bool: # Todo(Hamidreza)
+        """
+        add manager to playlist
+        Args:
+            uid: id playlist
+            username: username of account
+
+        Returns:
+
+        """
+        raise NotImplementedError()
+
+    def add_music_to_playlist(
+            self, token: str, playlist_uid: str, music_uid: str
+    ) -> bool: # Todo(Hamidreza)
+        """
+
+        Args:
+            token:
+            playlist_uid:
+            music_uid:
+
+        Returns:
+
+        """
+        raise NotImplementedError()
+
+    def remove_music_from_playlist(
+            self, token: str, playlist_uid: str, music_uid: str
+    ) -> bool: # Todo(Hamidreza)
+        """
+
+        Args:
+            token:
+            playlist_uid:
+            music_uid:
+
+        Returns:
+
+        """
+        raise NotImplementedError()
+

@@ -1,6 +1,4 @@
-# pylint: skip-file
-from typing import List, Optional, Union
-
+from typing import List, Optional
 from dataclasses import dataclass
 import enum
 
@@ -13,11 +11,8 @@ class AccountType(enum.IntEnum):
 @dataclass
 class File:
     id: int
-    mime: str
+    mime: str # image/jpg , application/pdf, ...
     path: str
-
-
-
 
 
 @dataclass
@@ -33,6 +28,7 @@ class Account:
     email: str
 
 
+
 @dataclass
 class Music:
     name: str
@@ -40,6 +36,8 @@ class Music:
     uid: str
     file: File
     quality: int
+
+
 @dataclass
 class PlayList:
     uid: str
