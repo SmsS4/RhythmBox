@@ -1,7 +1,7 @@
 music_id = 0
 music_name = ""
 musics = []
-premium = true
+premium = (localStorage.getItem('account_type') == "2")
 
 var options = {
     autoClose: true,
@@ -31,7 +31,7 @@ function play_music(music_id) {
     $("#title").text(music_name);
     music_id = music_id;
     var audio = $("#player");
-    $("#player").attr("src", "http://0.0.0.0:7000/music/"+music_id);
+    $("#player").attr("src", "music/"+music_id); /// changed
     audio[0].pause();
     audio[0].load(); //suspends and restores all audio element
 //    audio[0].play();
@@ -44,7 +44,7 @@ function downloadmusic() {
         // If you don't know the name or want to use
         // the webserver default set name = ''
         link.setAttribute('download', music_name);
-        link.href = "http://0.0.0.0:7000/music/"+music_id;
+        link.href = "music/"+music_id; /// changed
         document.body.appendChild(link);
         link.click();
         link.remove();

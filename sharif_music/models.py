@@ -33,7 +33,7 @@ class Account:
 class Music:
     name: str
     publisher_id: int
-    uid: str
+    uid: int
     file: File
     quality: int
 

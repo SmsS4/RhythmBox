@@ -22,26 +22,26 @@ class Server:
         self.files: Dict[int, File] = {}
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
-        self.musics: Dict[str, Music] = {
-            '1': Music(
-                "test",
+        self.musics: Dict[int, Music] = {
+            1: Music(
+                "wires",
                 0,
-                "1",
+                1,
                 File(
                     0,
                     "audio/mp3",
-                    "path/to/music"
+                    "/home/smss/Downloads/Telegram Desktop/wires.mp3"
                 ),
                 128
             ),
-            '2': Music(
-                "test",
+            2: Music(
+                "wires",
                 0,
-                "2",
+                2,
                 File(
                     1,
                     "audio/mp3",
-                    "path/to/music"
+                    "/home/smss/Downloads/Telegram Desktop/wires.mp3"
                 ),
                 128
             )
@@ -148,20 +148,34 @@ class Server:
         self.update_account(user)
         return 1
 
-    def login(self, username: str, password: str) -> str:
+    def login(self, username: str, password: str) -> Tuple[str, Optional[Account]]:
         token = str(int(uuid.uuid1()))
         account = self.get_account_by_username(username)
         if account is None or account.password != password:
-            return ""
+            return "", None
         self.token_to_account[token] = account
-        return token
+        return token, account
 
+    def edit(self, token: str, name: str, description: str):
+        account = self.get_account_by_token(token)
+        account.name = name
+        account.description = description
+        self.update_account(account)
 
+    def request_publisher(self, token: str):
+        account = self.get_account_by_token(token)
+        with open("requests", "a") as f:
+            f.write(str(account.id) + "$" + "pub\n")
+
+    def request_premium(self, token: str):
+        account = self.get_account_by_token(token)
+        with open("requests", "a") as f:
+            f.write(str(account.id) + "$" + "pre\n")
 
     def make_premium(self, token: str) -> bool:
         raise NotImplementedError()
 
-    def add_music(self, token: str, name:str, uploaded_file: UploadFile) -> bool:
+    def add_music(self, token: str, name: str, uploaded_file: UploadFile) -> bool:
         user = self.get_account_by_token(token)
         if not user.publisher:
             return False
@@ -176,8 +190,6 @@ class Server:
 
     def get_music(self, uid: str) -> Music:
         raise NotImplementedError()
-
-
 
     def follow_artis(self, token: str, artist: str) -> bool:
         raise NotImplementedError()
@@ -195,21 +207,10 @@ class Server:
         return token in self.token_to_account
 
     def search_artists(self, string: str) -> List[PublisherWeb]:
-        return [
-            PublisherWeb(41234, 'AghaSadegh')
-        ]
+        return [PublisherWeb(account.id, account.name) for account in self.accounts if string in account.name]
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
-        print(high_quality)
-        if high_quality:
-            return [
-                MusicWeb(5, 'wires', 320),
-                MusicWeb(2, 'not wires', 128),
-            ]
-        else:
-            return [
-                MusicWeb(2, 'not wires', 128),
-            ]
+        return [MusicWeb(music.uid, music.name, music.quality) for music in self.musics.values() if string in music.name and (music.quality == 128 or high_quality)]
 
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
         return [
@@ -218,8 +219,7 @@ class Server:
             PlaylistWeb(1, 'musics 1'),
         ]
 
-
-    def add_playlist(self, token: str, name: str) -> bool: # Todo(Hamidreza)
+    def add_playlist(self, token: str, name: str) -> bool:  # Todo(Hamidreza)
         """
         create empty playlist
 
@@ -232,7 +232,7 @@ class Server:
         """
         raise NotImplementedError()
 
-    def get_playlist(self, uid: str) -> PlayList: # Todo(Hamidreza)
+    def get_playlist(self, uid: str) -> PlayList:  # Todo(Hamidreza)
         """
         get playlist by ui
         Args:
@@ -243,7 +243,7 @@ class Server:
         """
         raise NotImplementedError()
 
-    def add_owner_to_playlist(self, uid: str, username: str) -> bool: # Todo(Hamidreza)
+    def add_owner_to_playlist(self, uid: str, username: str) -> bool:  # Todo(Hamidreza)
         """
         add manager to playlist
         Args:
@@ -257,7 +257,7 @@ class Server:
 
     def add_music_to_playlist(
             self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool: # Todo(Hamidreza)
+    ) -> bool:  # Todo(Hamidreza)
         """
 
         Args:
@@ -272,7 +272,7 @@ class Server:
 
     def remove_music_from_playlist(
             self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool: # Todo(Hamidreza)
+    ) -> bool:  # Todo(Hamidreza)
         """
 
         Args:
@@ -284,4 +284,3 @@ class Server:
 
         """
         raise NotImplementedError()
-

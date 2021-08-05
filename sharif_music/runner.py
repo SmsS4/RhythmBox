@@ -10,4 +10,4 @@ from sharif_music.webapi import init_api
 if __name__ == "__main__":
     server = Server(None)
     app = init_api(server)
-    uvicorn.run(app, host="0.0.0.0", port=7000)
+    uvicorn.run(app, host="localhost", port=7000)

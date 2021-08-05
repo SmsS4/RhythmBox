@@ -53,13 +53,13 @@ def init_api(server: Server) -> FastAPI:
         return Api.server.validate_token(token)
 
     @api.get('/profile/get_account')
-    def get_account(token:str) -> Account:
+    def get_account(token: str) -> Account:
         return Api.server.get_account_by_token(token)
 
-    @api.get("/music/{music_id}", )
-    def get_music(music_id: str):
-        file_like = open("/home/smss/Downloads/Telegram Desktop/wires.mp3", mode="rb")
-        return StreamingResponse(file_like, media_type="audio/mp3")
+    @api.get("/music/{music_id}")
+    def get_music(music_id: int):
+        file = Api.server.get_file_path(music_id)
+        return StreamingResponse(open(file.path, "rb"), media_type="audio/mp3")
 
     @api.get("/platform", response_class=HTMLResponse)
     def platform(request: Request, string: Optional[str]):
@@ -74,8 +74,25 @@ def init_api(server: Server) -> FastAPI:
         return templates.TemplateResponse("home.html", {"request": request})
 
     @api.post("/login")
-    def login(username: str = Form(...), password: str = Form(...)) -> str:
+    def login(username: str = Form(...), password: str = Form(...)) -> Tuple[str, Optional[Account]]:
         return Api.server.login(username, password)
+
+    @api.post("/edit")
+    def edit_profile(
+            token: str = Form(...),
+            name: str = Form(...),
+            description: str = Form(...),
+            req_publisher: str = Form(...),
+            req_premium: str = Form(...)
+    ):
+        print(req_publisher)
+        print(req_premium)
+        Api.server.edit(token, name, description)
+
+        if req_publisher == "true":
+            Api.server.request_publisher(token)
+        if req_premium == "true":
+            Api.server.request_premium(token)
 
     @api.post("/register")
     def register(
@@ -121,8 +138,9 @@ def init_api(server: Server) -> FastAPI:
 
     def make_premium(token: str) -> bool:
         return Api.server.make_premium(token)
+
     @api.post("/profile/upload_music")
-    def add_music(token: str, name:str, file: UploadFile = Form(...)) -> bool:
+    def add_music(token: str, name: str, file: UploadFile = Form(...)) -> bool:
         return Api.server.add_music(token, name, file)
 
     def search_music(music_name: str, music_genera: str) -> List[Music]:

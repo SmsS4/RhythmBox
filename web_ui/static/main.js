@@ -1,4 +1,4 @@
-base = "http://0.0.0.0:7000/"
+base = "" // changed
 
 
 var options = {
@@ -104,13 +104,23 @@ function login() {
     password = $("#password_field").val()
 
     $.post('login', {username:username, password:password},
-        function(token){
+        function(data){
+            token = data[0]
+            user = data[1]
             console.log("Login")
             /// login succesfull
             if (token){
                 localStorage.setItem('token', token);
+                localStorage.setItem('id', user['id']);
+                localStorage.setItem('username', user['username']);
+                localStorage.setItem('password', user['password']);
+                localStorage.setItem('name', user['name']);
+                localStorage.setItem('account_type', user['account_type']);
+                localStorage.setItem('publisher', user['publisher']);
+                localStorage.setItem('photo', user['photo']);
+                localStorage.setItem('description', user['description']);
+                localStorage.setItem('email', user['email']);
                 $("#loginModal").modal('hide')
-                localStorage.setItem('username', username)
                 toast.success("Login successfully");
                 init(token);
             }else {

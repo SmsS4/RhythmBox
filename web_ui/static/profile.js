@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
-
+    $("#name").val(localStorage.getItem('name'));
+    $("#description").val(localStorage.getItem('description'));
+    if (localStorage.getItem('publisher') == "true") $("#req_pub_div").hide()
+    if (localStorage.getItem('account_type') == "2") $("#req_pre_div").hide()
     $('.header').height($(window).height());
     token = localStorage.getItem('token');
     ok = false;
@@ -82,6 +85,7 @@ $(document).ready(function(e) {
       processData: false, // To send DOMDocument or non processed data file it is set to false
       success: function(data) {
         if (data == 1 || parseInt(data) == 1) {
+          location.reload();
           $("#msg").html(
             '<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> Data updated successfully.</div>'
           );
@@ -97,6 +101,7 @@ $(document).ready(function(e) {
         );
       }
     });
+
   });
 
 
@@ -130,4 +135,25 @@ $(document).ready(function(e) {
   });
 });
 
-
+function edit(){
+    name = $("#name").val()
+    description = $("#description").val()
+    localStorage.setItem('name', name);
+    localStorage.setItem('description', description);
+    req_publisher = String($("#req_pub").is(':checked'))
+    req_premium = String($("#req_pre").is(':checked'))
+    $.post(
+        '/edit',
+        {
+            token:token,
+            name:name,
+            description:description,
+            req_publisher:req_publisher,
+            req_premium:req_premium
+        },
+        function(data){},
+    ).fail(
+        function(){}
+    );
+    location.reload();
+}
