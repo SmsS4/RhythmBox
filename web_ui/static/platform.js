@@ -1,5 +1,7 @@
 music_id = 0
 music_name = ""
+current_playlist_id = 0
+playlist_musics = []
 musics = []
 premium = (localStorage.getItem('account_type') == "2")
 
@@ -21,21 +23,43 @@ var options = {
 var toast = new Toasty(options);
 toast.configure(options);
 
-function play_music(music_id) {
-    console.log(music_id);
+function set_add_remove_pl(){
+    base = $("#addtopld").attr('src').split("addmpl.png")[0];
+    base = base.split("removempl.png")[0]
+    for (var i = 0; i < playlist_musics.length; i++){
+        if(playlist_musics[i]["uid"] == music_id){
+            $("#addtopld").attr('src', base + "removempl.png")
+
+
+            document.getElementById('addtopld').onclick = remove_music_from_pl;
+            return;
+        }
+    }
+
+
+
+    // not found in playlist
+    $("#addtopld").attr('src', base + "addmpl.png")
+    document.getElementById('addtopld').onclick = addmusictopl;
+
+}
+
+function play_music(music_id_to_play) {
+    console.log(music_id_to_play);
     for (var j = 0; j < musics.length; j++){
-        if(musics[j]["id"] == music_id){
+        if(musics[j]["id"] == music_id_to_play || musics[j]["uid"] == music_id_to_play){
             music_name = musics[j]["name"];
         }
     }
     $("#title").text(music_name);
-    music_id = music_id;
+    music_id = music_id_to_play;
     var audio = $("#player");
-    $("#player").attr("src", "music/"+music_id); /// changed
+    $("#player").attr("src", "music/"+music_id_to_play); /// changed
     audio[0].pause();
     audio[0].load(); //suspends and restores all audio element
 //    audio[0].play();
     audio[0].oncanplaythrough = audio[0].play();
+    set_add_remove_pl();
 }
 
 function downloadmusic() {
@@ -80,7 +104,7 @@ function search(){
             }
             $('#search-result-list').append('<li class="list-group-item head-list">Playlists</li>');
             for (var i = 0; i < playlists.length; i++){
-                $('#search-result-list').append('<li class="list-group-item clickable">' + playlists[i]["name"] + '</li>');
+                $('#search-result-list').append('<li class="list-group-item clickable" onclick="showpl('+playlists[i]["id"]+')">' + playlists[i]["name"] + '</li>');
             }
 
 
@@ -97,5 +121,149 @@ function search(){
 $(document).ready(function(){
     if($("#search-input").val()){
         search();
+        $("#current_playlist").empty()
+        getmypl();
+
+//        $('#current_playlist').append('<li class="list-group-item head-list">Musics</li>');
     }
 });
+
+function getmypl(){
+    $("#my_playlists").empty()
+        $.get('get_my_pl', {username:localStorage.getItem('username')},
+        function(data){
+
+
+
+            $("#my_playlists").empty()
+             for (var i = 0; i < data.length; i++){
+                $('#my_playlists').append(
+                    '<li class="list-group-item clickable" onclick="showpl('+data[i]["id"]+')">' +  '<span class="qual" onclick="addmanager()">' +  "Add manager" + '</span>   '+ data[i]["name"] +'</li>'
+                );
+            }
+
+            $('#my_playlists').append(
+                    '<li class="list-group-item clickable" style="opacity:0.5" onclick="addnew_playlist()">' +  "Add New PlayList" + '</li>'
+                );
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+
+function addnew_playlist(){
+    var name = prompt("Please enter your playlist name");
+     $.post('addpl', {token:localStorage.getItem('token'), name:name},
+        function(data){
+
+                    toast.success("Playlist created");
+            getmypl();
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+function youarefree(){
+  toast.error("Free users can't listen to 320 musics");
+}
+
+function showpl(playlist_id) {
+    $.get('getpl', {uid:playlist_id},
+        function(data){
+            current_playlist_id = playlist_id;
+                musics = data['musics']
+                $("#title2").text(data['name']);
+                playlist_musics = musics;
+        $("#current_playlist").empty()
+         for (var i = 0; i < data['musics'].length; i++){
+                if(!premium && data['musics'][i]["quality"] == 320){
+                    $('#current_playlist').append(
+                        '<li class="list-group-item clickable" onclick="youarefree()">' + '<span class="qual">' +  data['musics'][i]["quality"] + '</span>   ' + data['musics'][i]["name"] + '</li>'
+                    );
+                }else{
+                    $('#current_playlist').append(
+                        '<li class="list-group-item clickable" onclick="play_music('+data['musics'][i]["uid"]+')">' + '<span class="qual">' +  data['musics'][i]["quality"] + '</span>   ' + data['musics'][i]["name"] + '</li>'
+                    );
+                }
+            }
+    set_add_remove_pl();
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+    console.log(playlist_id);
+}
+
+function addmusictopl() {
+
+
+    $.post('add_music_pl', {token: localStorage.getItem('token'), playlist_uid: current_playlist_id, music_uid: music_id},
+        function(data){
+
+                if(data){
+                    toast.error(data);
+                }else{
+                    toast.success("Added to playlist");
+                    showpl(current_playlist_id);
+
+                }
+            }
+
+
+
+    ).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+
+
+function remove_music_from_pl(){
+ $.post('remove_music_pl', {token: localStorage.getItem('token'), playlist_uid: current_playlist_id, music_uid: music_id},
+        function(data){
+                set_add_remove_pl();
+                if(data){
+                    toast.error(data);
+                }else{
+                    toast.success("Added to playlist");
+                    showpl(current_playlist_id);
+
+                }
+            }
+
+
+
+    ).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+
+function addmanager(){
+ var username = prompt("Please enter new manager username");
+     $.post('add_owener_pl', {token:localStorage.getItem('token'),uid:current_playlist_id, username:username},
+        function(data){
+            if(!data){
+                    toast.success("Manager Added");
+
+                    }else{
+                    toast.error(data);
+                    }
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}

@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import StreamingResponse
 
-from sharif_music.models import Music, PlayList, WebResult, AccountType, Account
+from sharif_music.models import Music, PlayList, WebResult, AccountType, Account, PlaylistWeb
 from sharif_music.server import Server
 
 
@@ -58,8 +58,9 @@ def init_api(server: Server) -> FastAPI:
 
     @api.get("/music/{music_id}")
     def get_music(music_id: int):
-        file = Api.server.get_file_path(music_id)
-        return StreamingResponse(open(file.path, "rb"), media_type="audio/mp3")
+        music = Api.server.get_music(music_id)
+        # file = Api.server.get_file_path(music_id)
+        return StreamingResponse(open(music.file.path, "rb"), media_type="audio/mp3")
 
     @api.get("/platform", response_class=HTMLResponse)
     def platform(request: Request, string: Optional[str]):
@@ -150,20 +151,29 @@ def init_api(server: Server) -> FastAPI:
         music_info = Api.server.get_music(uid)
         raise NotImplementedError()
 
-    def add_playlist(token: str, name: str) -> bool:
-        return Api.server.add_playlist(token, name)
+    @api.post("/addpl") # done
+    def add_playlist(token: str= Form(...), name: str= Form(...)) -> None:
+        Api.server.add_playlist(token, name)
 
-    def get_playlist(uid: str) -> PlayList:
+    @api.get("/getpl") # done
+    def get_playlist(uid: int) -> PlayList:
         return Api.server.get_playlist(uid)
 
-    def add_owner_to_playlist(uid: str, username: str) -> bool:
-        return Api.server.add_owner_to_playlist(uid, username)
+    @api.post("/add_owener_pl") # done
+    def add_owner_to_playlist(token:str=Form(...), uid: int= Form(...), username: str= Form(...)) -> str:
+        return Api.server.add_owner_to_playlist(token, uid, username)
 
-    def add_music_to_playlist(token: str, playlist_uid: str, music_uid: str) -> bool:
+    @api.post("/add_music_pl") # done
+    def add_music_to_playlist(token: str = Form(...), playlist_uid: int = Form(...), music_uid: int = Form(...)) -> str:
         return Api.server.add_music_to_playlist(token, playlist_uid, music_uid)
 
-    def remove_music_from_playlist(token: str, playlist_uid: str, music_uid) -> bool:
+    @api.post("/remove_music_pl") # done
+    def remove_music_from_playlist(token: str= Form(...), playlist_uid: int= Form(...), music_uid: int= Form(...)) -> str:
         return Api.server.remove_music_from_playlist(token, playlist_uid, music_uid)
+
+    @api.get("/get_my_pl")  # done
+    def get_my_playlists(username: str) -> List[PlaylistWeb]:
+        return Api.server.get_my_playlists(username)
 
     def get_default_playlist(token: str) -> PlayList:
         return Api.server.get_default_playlist(token)

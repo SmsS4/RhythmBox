@@ -19,6 +19,15 @@ button {
   height: 100%;
   background: #fff;
 }
+#audio-player-container2 {
+  position: relative;
+  margin: 100px 5% auto 5%;
+  padding: 10px;
+  width: 90%;
+  max-width: 500px;
+  height: 100%;
+  background: #fff;
+}
 
 
 
@@ -55,6 +64,9 @@ button {
   z-index: -1;
 }
 
+
+
+
 p {
   position: absolute;
   top: -18px;
@@ -66,7 +78,7 @@ p {
 }
 
 .icon {
-  margin: 20px 2.5% 20px 2.5%;
+  margin: 20px 2% 20px 0.5%;
 }
 
 .icon:hover {

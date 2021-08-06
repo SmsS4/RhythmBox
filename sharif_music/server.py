@@ -22,28 +22,37 @@ class Server:
         self.files: Dict[int, File] = {}
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
+        self.playlist: Dict[int, PlayList] = {}
+        self.__fetch_init_data_from_db()
+
+    def get_file_path(self, file_id: int) -> File:
+        return self.files[file_id]
+
+    def __fetch_init_data_from_db(self):
+        """
+        Gets data from db
+        """
+        # todo
+        __file = File(
+            0,
+            "audio/mp3",
+            "/home/smss/Downloads/Telegram Desktop/wires.mp3"
+        )
+        self.add_file(__file)
         self.musics: Dict[int, Music] = {
             1: Music(
                 "wires",
                 0,
                 1,
-                File(
-                    0,
-                    "audio/mp3",
-                    "/home/smss/Downloads/Telegram Desktop/wires.mp3"
-                ),
+                __file,
                 128
             ),
             2: Music(
                 "wires",
                 0,
                 2,
-                File(
-                    1,
-                    "audio/mp3",
-                    "/home/smss/Downloads/Telegram Desktop/wires.mp3"
-                ),
-                128
+                __file,
+                320
             )
         }
         #########
@@ -75,21 +84,23 @@ class Server:
                 email='smss2@chmail.ir'
             )
         )
+        self.playlist[0] = PlayList(
+            1,
+            [self.musics[1]],
+            "Sample",
+            [self.accounts[0].username]
+        )
         #########
-        self.__fetch_init_data_from_db()
-
-    def get_file_path(self, file_id: int) -> File:
-        return self.files[file_id]
-
-    def __fetch_init_data_from_db(self):
-        """
-        Gets data from db
-        """
-        # todo
 
     def get_account_by_username(self, username: str) -> Optional[Account]:
         for account in self.accounts:
             if account.username == username:
+                return account
+        return None
+
+    def get_account_by_id(self, account_id: int) -> Optional[Account]:
+        for account in self.accounts:
+            if account.id == account_id:
                 return account
         return None
 
@@ -188,8 +199,8 @@ class Server:
     def search_music(self, music_name: str, music_genera: str) -> List[Music]:
         raise NotImplementedError()
 
-    def get_music(self, uid: str) -> Music:
-        raise NotImplementedError()
+    def get_music(self, uid: int) -> Music:
+        return self.musics[uid]
 
     def follow_artis(self, token: str, artist: str) -> bool:
         raise NotImplementedError()
@@ -210,16 +221,24 @@ class Server:
         return [PublisherWeb(account.id, account.name) for account in self.accounts if string in account.name]
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
-        return [MusicWeb(music.uid, music.name, music.quality) for music in self.musics.values() if string in music.name and (music.quality == 128 or high_quality)]
+        return [MusicWeb(music.uid, music.name, music.quality) for music in self.musics.values() if
+                string in music.name and (music.quality == 128 or high_quality)]
 
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
         return [
-            PlaylistWeb(1, 'musics 2'),
-            PlaylistWeb(1, 'musics 5'),
-            PlaylistWeb(1, 'musics 1'),
+            PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
+            string in self.playlist[playlist_id].name
         ]
 
-    def add_playlist(self, token: str, name: str) -> bool:  # Todo(Hamidreza)
+    def add_playlist_to_db(self, playlist: PlayList):
+        # todo
+        pass
+
+    def update_playlist_in_db(self, playlist: PlayList):
+        # todo
+        pass
+
+    def add_playlist(self, token: str, name: str) -> None:
         """
         create empty playlist
 
@@ -230,9 +249,16 @@ class Server:
         Returns:
 
         """
-        raise NotImplementedError()
+        uid = utils.gen_id()
+        self.playlist[uid] = PlayList(
+            uid,
+            [],
+            name,
+            [self.get_account_by_token(token).username]
+        )
+        self.add_playlist_to_db(self.playlist[uid])
 
-    def get_playlist(self, uid: str) -> PlayList:  # Todo(Hamidreza)
+    def get_playlist(self, uid: int) -> PlayList:
         """
         get playlist by ui
         Args:
@@ -241,9 +267,9 @@ class Server:
         Returns:
 
         """
-        raise NotImplementedError()
+        return self.playlist[uid]
 
-    def add_owner_to_playlist(self, uid: str, username: str) -> bool:  # Todo(Hamidreza)
+    def add_owner_to_playlist(self,token:str, uid: int, username: str) -> Optional[str]:
         """
         add manager to playlist
         Args:
@@ -253,34 +279,41 @@ class Server:
         Returns:
 
         """
-        raise NotImplementedError()
+        if self.get_account_by_token(token).username != self.playlist[uid].owners[0]:
+            return "Only creator of playlist can add new manager"
+        if username in self.playlist[uid].owners:
+            return "Username is already manager"
+        if self.get_account_by_username(username) is None:
+            return "Username not found"
+        self.playlist[uid].owners.append(self.get_account_by_username(username).username)
+        self.update_playlist_in_db(self.playlist[uid])
+        return None
 
     def add_music_to_playlist(
-            self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool:  # Todo(Hamidreza)
-        """
-
-        Args:
-            token:
-            playlist_uid:
-            music_uid:
-
-        Returns:
-
-        """
-        raise NotImplementedError()
+            self, token: str, playlist_uid: int, music_uid: int
+    ) -> Optional[str]:
+        playlist = self.playlist[playlist_uid]
+        if self.get_account_by_token(token).username not in playlist.owners:
+            return "User is not manager of playlist"
+        if self.musics[music_uid] not in playlist.musics:
+            playlist.musics.append(self.musics[music_uid])
+            self.update_playlist_in_db(self.playlist[playlist_uid])
+            return None
+        return "Music is already in playlist"
 
     def remove_music_from_playlist(
-            self, token: str, playlist_uid: str, music_uid: str
-    ) -> bool:  # Todo(Hamidreza)
-        """
-
-        Args:
-            token:
-            playlist_uid:
-            music_uid:
-
-        Returns:
-
-        """
-        raise NotImplementedError()
+            self, token: str, playlist_uid: int, music_uid: int
+    ) -> Optional[str]:
+        playlist = self.playlist[playlist_uid]
+        if self.get_account_by_token(token).username not in playlist.owners:
+            return "User is not manager of playlist"
+        if self.musics[music_uid] in playlist.musics:
+            playlist.musics.remove(self.musics[music_uid])
+            self.update_playlist_in_db(self.playlist[playlist_uid])
+            return None
+        return "Music is not in playlist"
+    def get_my_playlists(self, username:str) -> List[PlaylistWeb]:
+        return [
+            PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
+            username in self.playlist[playlist_id].owners
+        ]
