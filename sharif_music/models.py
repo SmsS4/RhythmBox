@@ -11,7 +11,7 @@ class AccountType(enum.IntEnum):
 @dataclass
 class File:
     id: int
-    mime: str # image/jpg , application/pdf, ...
+    mime: str  # image/jpg , application/pdf, ...
     path: str
 
 
@@ -28,7 +28,6 @@ class Account:
     email: str
 
 
-
 @dataclass
 class Music:
     name: str
@@ -36,6 +35,7 @@ class Music:
     uid: int
     file: File
     quality: int
+    genera: str
 
 
 @dataclass

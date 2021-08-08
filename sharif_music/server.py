@@ -269,7 +269,7 @@ class Server:
         """
         return self.playlist[uid]
 
-    def add_owner_to_playlist(self,token:str, uid: int, username: str) -> Optional[str]:
+    def add_owner_to_playlist(self, token: str, uid: int, username: str) -> Optional[str]:
         """
         add manager to playlist
         Args:
@@ -312,7 +312,8 @@ class Server:
             self.update_playlist_in_db(self.playlist[playlist_uid])
             return None
         return "Music is not in playlist"
-    def get_my_playlists(self, username:str) -> List[PlaylistWeb]:
+
+    def get_my_playlists(self, username: str) -> List[PlaylistWeb]:
         return [
             PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
             username in self.playlist[playlist_id].owners

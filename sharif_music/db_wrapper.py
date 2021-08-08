@@ -39,9 +39,13 @@ class DB:
         self.do_query(query)
 
     def insert_account(self, account: Account) -> None:
+        """
+        Notes:
+            account.file is always None in ``insert_account`` method
+        """
         self.logger.debug("Insert account")
         if (
-            account.publisher == False
+                account.publisher == False
         ):  # account is a user so we add to registered users table
             tpy = "err"
             if account.account_type == AccountType.PREMIUM:
@@ -71,11 +75,50 @@ class DB:
             col_names = ["user_id", "username", "password"]
             values = [account.id, account.username, account.password]
             self.insert("publisher", col_names, values)
+
     def select_accounts(self) -> List[Account]:
         pass
-    def insert_playlist(self, playlist: PlayList) -> None:
 
+    def update_account(self, account: Account):
         pass
 
+    #####
+    def add_file(self, file: File):
+        pass
+
+    def select_files(self) -> List[File]:
+        pass
+
+    ####
+    def insert_playlist(self, playlist: PlayList) -> None:
+        pass
+
+    def delete_playlist(self, playlist_id: int) -> None:
+        pass
+
+    def insert_new_music_to_playlist(self, playlist_id: int, new_music_id: int):
+        pass
+
+    def delete_music_from_playlist(self, playlist_id: int, music_to_remove_id: int):
+        pass
+
+    def insert_new_owner_to_playlist(self, playlist_id: int, new_owner: str):
+        pass
+
+    def select_playlists(self) -> List[PlayList]:
+        pass
+
+    #####
     def insert_music(self, music: Music) -> None:
+        self.add_file(music.file)
+        pass
+
+    def select_musics(self) -> List[Music]:
+        pass
+
+    ###
+    def add_request(self, request_string: str) -> None:
+        pass
+
+    def select_requests(self) -> List[str]:
         pass
