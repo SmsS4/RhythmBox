@@ -43,7 +43,7 @@ class PlayList:
     uid: int
     musics: List[Music]
     name: str
-    owners: List[str]
+    owners: List[Account]
 
 
 @dataclass
