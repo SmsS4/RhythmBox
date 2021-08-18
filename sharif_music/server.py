@@ -45,14 +45,16 @@ class Server:
                 0,
                 1,
                 __file,
-                128
+                128,
+                Generes.POP,
             ),
             2: Music(
                 "wires",
                 0,
                 2,
                 __file,
-                320
+                320,
+                Generes.RAP
             )
         }
         #########
@@ -124,7 +126,7 @@ class Server:
             email=email,
         )
         self.accounts.append(account)
-        # self.__db.insert_account(account) todo
+        self.__db.insert_account(account)
         return "Register successfully. Welcome to SharifMusic", True
 
     BASE = "/var/tmp/"

@@ -8,6 +8,6 @@ from sharif_music.server import Server
 from sharif_music.webapi import init_api
 
 if __name__ == "__main__":
-    server = Server(None)
+    server = Server(DB())
     app = init_api(server)
     uvicorn.run(app, host="localhost", port=7000)

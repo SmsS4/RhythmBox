@@ -37,13 +37,19 @@ class Music:
     quality: int
     genera: str
 
+class Generes:
+    POP = "Pop"
+    RAP = "Rap"
+    ROCK = "Rock"
+    HEAVY_METAL = "HeavyMetal"
+    BLUE = "Blue"
 
 @dataclass
 class PlayList:
     uid: int
     musics: List[Music]
     name: str
-    owners: List[Account]
+    owners: List[str]
 
 
 @dataclass
