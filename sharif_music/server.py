@@ -23,6 +23,7 @@ class Server:
         self.token_to_account: Dict[str, Account] = {}
         self.accounts: List[Account] = []
         self.playlist: Dict[int, PlayList] = {}
+        self.musics: Dict[int, Music] = {}
         self.__fetch_init_data_from_db()
 
     def get_file_path(self, file_id: int) -> File:
@@ -32,34 +33,47 @@ class Server:
         """
         Gets data from db
         """
-        # todo
-        __file = File(
-            0,
-            "audio/mp3",
-            "/home/smss/Downloads/Telegram Desktop/wires.mp3"
-        )
-        self.add_file(__file)
-        self.musics: Dict[int, Music] = {
-            1: Music(
-                "wires",
-                0,
-                1,
-                __file,
-                128,
-                Generes.POP,
-            ),
-            2: Music(
-                "wires",
-                0,
-                2,
-                __file,
-                320,
-                Generes.RAP
-            )
-        }
-        #########
-        # remove
-        # inja mitoni account daem ezafe koni
+        self.accounts = self.__db.select_accounts()
+        self.files = {file.id:file for file in self.__db.select_files()}
+        self.musics = {music.uid:music for music in self.__db.select_musics()}
+        self.playlist = self.__db.select_playlists()
+        # files = [
+        #     File(
+        #         1,
+        #         0,
+        #         "audio/mp3",
+        #         "/home/smss/Downloads/Telegram Desktop/wires.mp3"
+        #     ),
+        #     File(
+        #         2,
+        #         1,
+        #         "audio/mp3",
+        #         "/home/smss/Downloads/Telegram Desktop/wires.mp3"
+        #     ),
+        # ]
+        # self.files[files[0].id] = files[0]
+        # self.files[files[1].id] = files[1]
+        # self.musics.update({
+        #     1: Music(
+        #         "wires",
+        #         0,
+        #         1,
+        #         files[0],
+        #         128,
+        #         Generes.POP,
+        #     ),
+        #     2: Music(
+        #         "wires",
+        #         0,
+        #         2,
+        #         files[1],
+        #         320,
+        #         Generes.RAP
+        #     )
+        # })
+        # #########
+        # # remove
+        # # inja mitoni account daem ezafe koni
         self.accounts.append(
             Account(
                 id=1,
@@ -73,25 +87,25 @@ class Server:
                 email='smss@chmail.ir'
             )
         )
-        self.accounts.append(
-            Account(
-                id=2,
-                username='nottest2',
-                password='nottest2',
-                name='notname',
-                account_type=AccountType.FREE,
-                publisher=False,
-                photo=None,
-                description='notdescription2',
-                email='smss2@chmail.ir'
-            )
-        )
-        self.playlist[0] = PlayList(
-            1,
-            [self.musics[1]],
-            "Sample",
-            [self.accounts[0].username]
-        )
+        # self.accounts.append(
+        #     Account(
+        #         id=2,
+        #         username='nottest2',
+        #         password='nottest2',
+        #         name='notname',
+        #         account_type=AccountType.FREE,
+        #         publisher=False,
+        #         photo=None,
+        #         description='notdescription2',
+        #         email='smss2@chmail.ir'
+        #     )
+        # )
+        # self.playlist[0] = PlayList(
+        #     1,
+        #     [self.musics[1]],
+        #     "Sample",
+        #     [self.accounts[0].username]
+        # )
         #########
 
     def get_account_by_username(self, username: str) -> Optional[Account]:
@@ -134,30 +148,28 @@ class Server:
     def get_photo(self, url: str):
         return open(f"{self.BASE}{url}", "r")
 
-    def add_file(self, file: File) -> None:
-        self.files[file.id] = file
-        # Todo add file to db
 
-    def upload_file(self, uploaded_file: UploadFile) -> File:
+
+    def upload_file(self, uploaded_file: UploadFile, owner_id:int) -> File:
         file_id = utils.gen_id()
         path = f"{self.BASE}{file_id}"
         file = File(
+            owner_id=owner_id,
             id=utils.gen_id(),
             mime=uploaded_file.content_type,
             path=path,
         )
         with open(path, "wb") as f:
             f.write(uploaded_file.file.read())
-        self.add_file(file)
         return file
 
     def update_account(self, account: Account):
-        # todo update db
-        pass
+        self.__db.update_account(account)
 
     def change_photo(self, token: str, uploaded_file: UploadFile) -> int:
         user = self.get_account_by_token(token)
-        user.photo = self.upload_file(uploaded_file)
+        user.photo = self.upload_file(uploaded_file, user.id)
+        self.files[user.photo.id] = user.photo
         self.update_account(user)
         return 1
 
@@ -177,35 +189,36 @@ class Server:
 
     def request_publisher(self, token: str):
         account = self.get_account_by_token(token)
-        with open("requests", "a") as f:
-            f.write(str(account.id) + "$" + "pub\n")
+        self.__db.insert_request(f"{account.id}$pub")
 
     def request_premium(self, token: str):
         account = self.get_account_by_token(token)
-        with open("requests", "a") as f:
-            f.write(str(account.id) + "$" + "pre\n")
+        self.__db.insert_request(f"{account.id}$pre")
 
-    def make_premium(self, token: str) -> bool:
-        raise NotImplementedError()
-
-    def add_music(self, token: str, name: str, uploaded_file: UploadFile) -> bool:
+    def add_music(self, token: str, name: str, uploaded_file: UploadFile, genera:str) -> bool:
         user = self.get_account_by_token(token)
         if not user.publisher:
             return False
-        file = self.upload_file(uploaded_file)
-        print(name)
-        # todo add music to db
-        print(file)
+        music = Music(
+            name=name,
+            publisher_id=user.id,
+            uid=utils.gen_id(),
+            file=None,
+            quality=128,
+            genera=genera
+        )
+        file = self.upload_file(uploaded_file, music.uid)
+        music.file = file
+        self.__db.insert_music(music)
+        self.files[file.id] = file
+        self.musics[music.uid] = music
         return True
 
-    def search_music(self, music_name: str, music_genera: str) -> List[Music]:
-        raise NotImplementedError()
+
 
     def get_music(self, uid: int) -> Music:
         return self.musics[uid]
 
-    def follow_artis(self, token: str, artist: str) -> bool:
-        raise NotImplementedError()
 
     def serach(self, token: str, string: str) -> Dict[str, List[WebResult]]:
         user = self.get_account_by_token(token)
@@ -223,7 +236,7 @@ class Server:
         return [PublisherWeb(account.id, account.name) for account in self.accounts if string in account.name]
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
-        return [MusicWeb(music.uid, music.name, music.quality) for music in self.musics.values() if
+        return [MusicWeb(music.uid, music.name, music.quality, music.genera) for music in self.musics.values() if
                 string in music.name and (music.quality == 128 or high_quality)]
 
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
@@ -233,12 +246,11 @@ class Server:
         ]
 
     def add_playlist_to_db(self, playlist: PlayList):
-        # todo
-        pass
+        self.__db.insert_playlist(playlist)
 
     def update_playlist_in_db(self, playlist: PlayList):
-        # todo
-        pass
+        self.__db.delete_playlist(playlist.uid)
+        self.__db.insert_playlist(playlist)
 
     def add_playlist(self, token: str, name: str) -> None:
         """
@@ -281,8 +293,8 @@ class Server:
         Returns:
 
         """
-        if self.get_account_by_token(token).username != self.playlist[uid].owners[0]:
-            return "Only creator of playlist can add new manager"
+        if self.get_account_by_token(token).username not in self.playlist[uid].owners:
+            return "Only managers can add new manager"
         if username in self.playlist[uid].owners:
             return "Username is already manager"
         if self.get_account_by_username(username) is None:

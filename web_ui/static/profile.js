@@ -110,7 +110,7 @@ $(document).ready(function(e) {
     $("#msg").html('<div class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Please wait...!</div>');
     $.ajax({
       type: "POST",
-      url: "upload_music?token="+token+"&name="+$("#music_name").val(),
+      url: "upload_music?token="+token+"&name="+$("#music_name").val()+"&genera="+$("#genera").val(),
       data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
       contentType: false, // The content type used when sending data to the server.
       cache: false, // To unable request pages to be cached

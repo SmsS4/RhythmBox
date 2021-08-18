@@ -59,7 +59,6 @@ def init_api(server: Server) -> FastAPI:
     @api.get("/music/{music_id}")
     def get_music(music_id: int):
         music = Api.server.get_music(music_id)
-        # file = Api.server.get_file_path(music_id)
         return StreamingResponse(open(music.file.path, "rb"), media_type="audio/mp3")
 
     @api.get("/platform", response_class=HTMLResponse)
@@ -86,10 +85,7 @@ def init_api(server: Server) -> FastAPI:
             req_publisher: str = Form(...),
             req_premium: str = Form(...)
     ):
-        print(req_publisher)
-        print(req_premium)
         Api.server.edit(token, name, description)
-
         if req_publisher == "true":
             Api.server.request_publisher(token)
         if req_premium == "true":
@@ -102,7 +98,6 @@ def init_api(server: Server) -> FastAPI:
             email: str = Form(...),
             name: str = Form(...),
     ) -> Tuple[str, bool]:
-        print(username, password, email, name)
         return Api.server.create_account(username, password, email, name)
 
     @api.post("/profile/change_photo")
@@ -137,19 +132,9 @@ def init_api(server: Server) -> FastAPI:
             },
         )
 
-    def make_premium(token: str) -> bool:
-        return Api.server.make_premium(token)
-
     @api.post("/profile/upload_music")
-    def add_music(token: str, name: str, file: UploadFile = Form(...)) -> bool:
-        return Api.server.add_music(token, name, file)
-
-    def search_music(music_name: str, music_genera: str) -> List[Music]:
-        return Api.server.search_music(music_name, music_genera)
-
-    def get_music(uid: str):
-        music_info = Api.server.get_music(uid)
-        raise NotImplementedError()
+    def add_music(token: str, name: str,genera: str, file: UploadFile = Form(...)) -> bool:
+        return Api.server.add_music(token, name, file, genera)
 
     @api.post("/addpl") # done
     def add_playlist(token: str= Form(...), name: str= Form(...)) -> None:

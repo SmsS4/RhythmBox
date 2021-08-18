@@ -10,6 +10,7 @@ class AccountType(enum.IntEnum):
 
 @dataclass
 class File:
+    owner_id: int
     id: int
     mime: str  # image/jpg , application/pdf, ...
     path: str
@@ -65,6 +66,7 @@ class PublisherWeb(WebResult): pass
 @dataclass
 class MusicWeb(WebResult):
     quality: int
+    genera: str
 
 
 @dataclass

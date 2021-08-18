@@ -96,7 +96,7 @@ function search(){
             $('#search-result-list').append('<li class="list-group-item head-list">Musics</li>');
 
             for (var i = 0; i < musics.length; i++){
-                $('#search-result-list').append('<li class="list-group-item clickable" onclick="play_music('+musics[i]["id"]+')">' + '<span class="qual">' +  musics[i]["quality"] + '</span>   ' + musics[i]["name"] + '</li>');
+                $('#search-result-list').append('<li class="list-group-item clickable" onclick="play_music('+musics[i]["id"]+')">' + '<span class="qual">' +  musics[i]["quality"] + '</span>   ' + '<span class="qual">' +  musics[i]["genera"] + '</span>   '+ musics[i]["name"] + '</li>');
             }
             $('#search-result-list').append('<li class="list-group-item head-list">Artists</li>');
             for (var i = 0; i < artists.length; i++){
