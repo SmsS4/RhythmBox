@@ -13,6 +13,7 @@ $(document).ready(function(){
             url: 'get_account'+'?token=' + token,
             success: function(account) {
                 if(account){
+                    username = account['username']
                     console.log(account);
                     ok = (account['username'] == $("#usern").text().trim());
                     publisher = account['publisher']
@@ -31,16 +32,21 @@ $(document).ready(function(){
     }
     if (ok){
         $(".hidden_if_not_user").css("visibility", "visible")
+        $(".hidden_if_user").css("visibility", "hidden")
+
 //        $("#upload_profile").show()
 //        $("#upld_btn").show()
 //        $("#upld_btn2").show()
     }else{
         $(".hidden_if_not_user").css("visibility", "hidden")
+        $(".hidden_if_user").css("visibility", "visible")
+
 
 //        $("#upload_profile").hide()
 //        $("#upld_btn").hide()
 //        $("#upld_btn2").hide()
     }
+    checkfollow();
 
 });
 
@@ -48,6 +54,10 @@ function upld() {
     if(ok){
         $("#brws").click()
     }
+}
+
+function gohome() {
+    window.location.href =  window.location.href.split("/profile")[0];
 }
 
 $(document).on("click", ".browse", function() {
@@ -156,4 +166,40 @@ function edit(){
         function(){}
     );
     location.reload();
+}
+
+
+function follow(){
+    $.post(
+        '/follow',
+        {
+            token:token,
+            username:$("#usern").text().trim(),
+        },
+        function(data){
+
+        },
+    ).fail(
+        function(){}
+    );
+
+}
+
+function checkfollow(){
+    $.post(
+        '/checkfollow',
+        {
+            token:token,
+            username:$("#usern").text().trim(),
+        },
+        function(data){
+            if(data == true){
+                $("#folbut").text('Followed');
+            }else{
+            }
+        },
+    ).fail(
+        function(){}
+    );
+
 }

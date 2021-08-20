@@ -140,6 +140,10 @@ def init_api(server: Server) -> FastAPI:
     def add_playlist(token: str= Form(...), name: str= Form(...)) -> None:
         Api.server.add_playlist(token, name)
 
+    @api.post("/delpl")  # done
+    def add_playlist(token: str = Form(...), playlist_id: int = Form(...)) -> None:
+        return Api.server.remove_playlist(token, playlist_id)
+
     @api.get("/getpl") # done
     def get_playlist(uid: int) -> PlayList:
         return Api.server.get_playlist(uid)
@@ -159,11 +163,19 @@ def init_api(server: Server) -> FastAPI:
     @api.get("/get_my_pl")  # done
     def get_my_playlists(username: str) -> List[PlaylistWeb]:
         return Api.server.get_my_playlists(username)
+    @api.post("/follow")
+    def follow(token: str = Form(...), username: str = Form(...)):
+        return Api.server.follow(token, username)
 
-    def get_default_playlist(token: str) -> PlayList:
-        return Api.server.get_default_playlist(token)
+    @api.post("/checkfollow")
+    def follow(token: str = Form(...), username: str = Form(...)):
+        return Api.server.checkfollow(token, username)
+    @api.post("/share")
+    def share(playlist_id:int= Form(...), username:str= Form(...)):
+        Api.server.share(playlist_id, username)
+    @api.get("/swm")
+    def get_default_playlist(token: str) -> List[PlaylistWeb]:
+        return Api.server.shared_with_me(token)
 
-    def follow_artis(token: str, artist: str) -> bool:
-        return Api.server.follow_artis(token, artist)
 
     return api

@@ -1,4 +1,5 @@
 # pylint: skip-file
+import collections
 import uuid
 
 from fastapi import UploadFile
@@ -24,7 +25,18 @@ class Server:
         self.accounts: List[Account] = []
         self.playlist: Dict[int, PlayList] = {}
         self.musics: Dict[int, Music] = {}
+        self.followers: Dict[int, List[int]] = collections.defaultdict(list)
         self.__fetch_init_data_from_db()
+        self.shared: Dict[int, List[int]] = collections.defaultdict(list)
+
+    def share(self, playlist_id: int, username: str):
+        self.shared[
+            self.get_account_by_username(username).id
+        ].append(playlist_id)
+
+    def shared_with_me(self, token: str) -> List[PlaylistWeb]:
+        return [PlaylistWeb(id=playlist_id, name=self.playlist[playlist_id].name) for playlist_id in
+                self.shared[self.get_account_by_token(token).id] if playlist_id in self.playlist]
 
     def get_file_path(self, file_id: int) -> File:
         return self.files[file_id]
@@ -34,8 +46,8 @@ class Server:
         Gets data from db
         """
         self.accounts = self.__db.select_accounts()
-        self.files = {file.id:file for file in self.__db.select_files()}
-        self.musics = {music.uid:music for music in self.__db.select_musics()}
+        self.files = {file.id: file for file in self.__db.select_files()}
+        self.musics = {music.uid: music for music in self.__db.select_musics()}
         self.playlist = self.__db.select_playlists()
         # files = [
         #     File(
@@ -141,6 +153,23 @@ class Server:
         )
         self.accounts.append(account)
         self.__db.insert_account(account)
+        publishers_playlist = PlayList(
+            uid=account.id,
+            musics=[],
+            name="Followings",
+            owners=[account.username]
+        )
+        self.add_playlist_to_db(publishers_playlist)
+        self.playlist[publishers_playlist.uid] = publishers_playlist
+
+        discover_playlist = PlayList(
+            uid=account.id+1,
+            musics=[],
+            name="Discover",
+            owners=[account.username]
+        )
+        self.add_playlist_to_db(discover_playlist)
+        self.playlist[discover_playlist.uid] = discover_playlist
         return "Register successfully. Welcome to SharifMusic", True
 
     BASE = "/var/tmp/"
@@ -148,9 +177,7 @@ class Server:
     def get_photo(self, url: str):
         return open(f"{self.BASE}{url}", "r")
 
-
-
-    def upload_file(self, uploaded_file: UploadFile, owner_id:int) -> File:
+    def upload_file(self, uploaded_file: UploadFile, owner_id: int) -> File:
         file_id = utils.gen_id()
         path = f"{self.BASE}{file_id}"
         file = File(
@@ -195,7 +222,7 @@ class Server:
         account = self.get_account_by_token(token)
         self.__db.insert_request(f"{account.id}$pre")
 
-    def add_music(self, token: str, name: str, uploaded_file: UploadFile, genera:str) -> bool:
+    def add_music(self, token: str, name: str, uploaded_file: UploadFile, genera: str) -> bool:
         user = self.get_account_by_token(token)
         if not user.publisher:
             return False
@@ -212,15 +239,24 @@ class Server:
         self.__db.insert_music(music)
         self.files[file.id] = file
         self.musics[music.uid] = music
+        for follower_username in self.followers[user.id]:
+            follower = self.get_account_by_username(follower_username)
+            self.playlist[follower.id].musics.append(music)
+            self.update_playlist_in_db(self.playlist[follower.id])
         return True
-
-
 
     def get_music(self, uid: int) -> Music:
         return self.musics[uid]
 
-
     def serach(self, token: str, string: str) -> Dict[str, List[WebResult]]:
+        if string.startswith('sharedpl$') :
+            name = string.split("sharedpl$")[1]
+            print(name)
+            print(len(name))
+            print(self.playlist)
+            return {
+                'Shared Playlist': [PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if name == self.playlist[playlist_id].name]
+            }
         user = self.get_account_by_token(token)
         result = {
             'artists': self.search_artists(string),
@@ -233,7 +269,15 @@ class Server:
         return token in self.token_to_account
 
     def search_artists(self, string: str) -> List[PublisherWeb]:
-        return [PublisherWeb(account.id, account.name) for account in self.accounts if string in account.name]
+        return [PublisherWeb(account.username, account.name) for account in self.accounts if
+                string in account.name and account.publisher]
+
+    def follow(self, token: str, username: str) -> None:
+        self.followers[self.get_account_by_username(username).id].append(self.get_account_by_token(token).username)
+        # todo db
+
+    def checkfollow(self, token: str, username: str) -> bool:
+        return self.get_account_by_token(token).username in self.followers[self.get_account_by_username(username).id]
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
         return [MusicWeb(music.uid, music.name, music.quality, music.genera) for music in self.musics.values() if
@@ -242,7 +286,7 @@ class Server:
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
         return [
             PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
-            string in self.playlist[playlist_id].name
+            string in self.playlist[playlist_id].name and self.playlist[playlist_id].name not in("Followings", "Discover")
         ]
 
     def add_playlist_to_db(self, playlist: PlayList):
@@ -332,3 +376,8 @@ class Server:
             PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
             username in self.playlist[playlist_id].owners
         ]
+
+    def remove_playlist(self, token: str, playlist_id: int) -> Optional[str]:
+        self.playlist.pop(playlist_id)
+        self.__db.delete_playlist(playlist_id)
+        return None

@@ -16,7 +16,7 @@ import random
 
 
 class DB:
-    PATH = f"/tmp/shm{random.randint(0, 10000000)}.db"  #
+    PATH = f"/tmp/shm{20+0*random.randint(0, 10000000)}.db"  #
 
     def get_connection(self) -> sqlite3.Connection:
         thread_id = threading.get_ident()

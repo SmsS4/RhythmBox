@@ -1,10 +1,23 @@
+
 #profile_header {
     background-image: url("images/profile.jpg");
     background-size: cover;
     background-position: center;
     position: relative;
 }
-
+.homebut{
+    height: 50px;
+    width: 5%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(200, 200, 200, 1);
+    border-radius: 3px;
+    color:black;
+    text-decoration:none;
+    margin: 20px;
+}
 #page-content {
 
 }
