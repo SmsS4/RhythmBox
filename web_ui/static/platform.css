@@ -43,11 +43,20 @@ button {
 }
 
 
+#audio-player-container2::before {
+  position: absolute;
+  content: '';
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  left: -2px;
+  top: -2px;
+  background: linear-gradient(to left, #007db5, #ff8a00);
+  z-index: -1;
+}
 #search-result {
   position: relative;
   margin: 100px 5% auto 5%;
   padding: 10px;
-  width: 90%;
   max-width: 500px;
   height: 100%;
   background: #fff;
@@ -106,6 +115,7 @@ path {
     border-radius: 3px;
 }
 
+
 .search_icon{
     height: 50px;
     width: 20%;
@@ -117,6 +127,41 @@ path {
     border-radius: 3px;
     color:black;
     text-decoration:none;
+}
+
+
+.homebut{
+    height: 50px;
+    width: 5%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(200, 200, 200, 1);
+    border-radius: 3px;
+    color:black;
+    text-decoration:none;
+    margin: 5px;
+    background: linear-gradient(to left, #FF7db5, #FF8000);
+
+
+}
+
+.homebut2{
+    height: 50px;
+    padding: 5px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(200, 200, 200, 1);
+    border-radius: 3px;
+    color:black;
+    text-decoration:none;
+    margin: 5px;
+    background: linear-gradient(to left, #FF7db5, #FF8000);
+
+
 }
 
 

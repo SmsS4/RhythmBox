@@ -17,7 +17,7 @@ class File:
 
 
 @dataclass
-class Account:
+class Account:  # pylint:disable=too-many-instance-attributes
     id: int
     username: str
     password: str
@@ -38,12 +38,14 @@ class Music:
     quality: int
     genera: str
 
+
 class Generes:
     POP = "Pop"
     RAP = "Rap"
     ROCK = "Rock"
     HEAVY_METAL = "HeavyMetal"
     BLUE = "Blue"
+
 
 @dataclass
 class PlayList:
@@ -60,7 +62,8 @@ class WebResult:
 
 
 @dataclass
-class PublisherWeb(WebResult): pass
+class PublisherWeb(WebResult):
+    pass
 
 
 @dataclass
@@ -70,4 +73,5 @@ class MusicWeb(WebResult):
 
 
 @dataclass
-class PlaylistWeb(WebResult): pass
+class PlaylistWeb(WebResult):
+    pass

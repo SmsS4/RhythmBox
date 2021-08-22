@@ -4,7 +4,14 @@ current_playlist_id = 0
 playlist_musics = []
 musics = []
 premium = (localStorage.getItem('account_type') == "2")
+tof = false
 
+function gohome() {
+    window.location.href =  window.location.href.split("/platform")[0];
+}
+function showprofile(username){
+    window.location.href =  window.location.href.split("/platform")[0]+"/profile/" + username;
+}
 var options = {
     autoClose: true,
     progressBar: true,
@@ -83,6 +90,16 @@ function search(){
     console.log(string);
     $.get('search', {token:token, string:string},
         function(data){
+            if ('Shared Playlist' in data){
+
+                $("#search-result-list").empty()
+                $('#search-result-list').append('<li class="list-group-item head-list">Shared Playlist</li>');
+                plist = data['Shared Playlist']
+                for (var i = 0; i < plist.length; i++){
+                    $('#search-result-list').append('<li class="list-group-item clickable" onclick="showpl('+plist[i]["id"]+')">' + plist[i]["name"] + '</li>');
+                }
+                return;
+            }
             console.log(data);
             var artists = data['artists']
             musics = data['musics']
@@ -100,7 +117,7 @@ function search(){
             }
             $('#search-result-list').append('<li class="list-group-item head-list">Artists</li>');
             for (var i = 0; i < artists.length; i++){
-                $('#search-result-list').append('<li class="list-group-item clickable">' + artists[i]["name"] + '</li>');
+                $('#search-result-list').append('<li class="list-group-item clickable" onclick="showprofile('+ "'" + artists[i]["id"]+"'" +')" >' + artists[i]["name"] + '</li>');
             }
             $('#search-result-list').append('<li class="list-group-item head-list">Playlists</li>');
             for (var i = 0; i < playlists.length; i++){
@@ -108,6 +125,47 @@ function search(){
             }
 
 
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unkown error");
+
+    });
+}
+
+function share(playlist_id){
+
+ var username = prompt("Please enter new manager username");
+     $.post('share', {playlist_id:playlist_id, username:username},
+        function(data){
+            if(!data){
+                    toast.success("Shared");
+
+                    }else{
+                    toast.error(data);
+                    }
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+function shared_with_me(){
+    var token = localStorage.getItem('token');
+
+    $.get('swm', {token:token},
+        function(data){
+            console.log(data);
+            var playlists = data
+            $("#search-result-list").empty()
+
+            $('#search-result-list').append('<li class="list-group-item head-list">Shared With Me</li>');
+            for (var i = 0; i < playlists.length; i++){
+                $('#search-result-list').append('<li class="list-group-item clickable" onclick="showpl('+playlists[i]["id"]+')">' + playlists[i]["name"] + '</li>');
+            }
 
 
     }).fail(function(){
@@ -128,7 +186,25 @@ $(document).ready(function(){
     }
 });
 
+function remove(playlist_id){
+    tof = true;
+    $.post('delpl', {token:localStorage.getItem('token'), playlist_id:playlist_id},
+        function(data){
+            if(data == null){
+                toast.success("Playlist removed");
+                getmypl();
+            }else{
+                toast.error(data);
+            }
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
+}
+
 function getmypl(){
+
     $("#my_playlists").empty()
         $.get('get_my_pl', {username:localStorage.getItem('username')},
         function(data){
@@ -137,9 +213,15 @@ function getmypl(){
 
             $("#my_playlists").empty()
              for (var i = 0; i < data.length; i++){
-                $('#my_playlists').append(
-                    '<li class="list-group-item clickable" onclick="showpl('+data[i]["id"]+')">' +  '<span class="qual" onclick="addmanager()">' +  "Add manager" + '</span>   '+ data[i]["name"] +'</li>'
-                );
+                if (data[i]["name"] != "Followings" && data[i]["name"] != "Discover"){
+                    $('#my_playlists').append(
+                        '<li class="list-group-item clickable" onclick="showpl('+data[i]["id"]+')">' +  '<span class="qual" onclick="addmanager('+data[i]["id"]+')">' +  "Add manager" + '</span>   ' +  '<span class="qual" onclick="remove('+ data[i]["id"] +')">' +  "Remove" + '</span>   ' +  '<span class="qual" onclick="share('+ data[i]["id"] +')">' +  "Share" + '</span>   '+ data[i]["name"] +'</li>'
+                    );
+                }else{
+                    $('#my_playlists').append(
+                        '<li class="list-group-item clickable" onclick="showpl('+data[i]["id"]+')">' + data[i]["name"] +'</li>'
+                    );
+                }
             }
 
             $('#my_playlists').append(
@@ -173,11 +255,16 @@ function youarefree(){
 }
 
 function showpl(playlist_id) {
+    if (tof){
+        tof = false;
+        return;
+    }
     $.get('getpl', {uid:playlist_id},
         function(data){
             current_playlist_id = playlist_id;
                 musics = data['musics']
                 $("#title2").text(data['name']);
+                $("#plink").text(window.location.href.split("/platform")[0]+"/platform?string=sharedpl$"+data['name']);
                 playlist_musics = musics;
         $("#current_playlist").empty()
          for (var i = 0; i < data['musics'].length; i++){
@@ -249,9 +336,10 @@ function remove_music_from_pl(){
     });
 }
 
-function addmanager(){
+function addmanager(playlist_id){
+
  var username = prompt("Please enter new manager username");
-     $.post('add_owener_pl', {token:localStorage.getItem('token'),uid:current_playlist_id, username:username},
+     $.post('add_owener_pl', {token:localStorage.getItem('token'),uid:playlist_id, username:username},
         function(data){
             if(!data){
                     toast.success("Manager Added");

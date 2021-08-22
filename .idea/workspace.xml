@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60321cc1-5836-4e53-81f9-bc3d7efeaad3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/db_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/db_wrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/webapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/webapi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/platform.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/platform.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/templates/profile.html" afterDir="false" />
-    </list>
+    <list default="true" id="60321cc1-5836-4e53-81f9-bc3d7efeaad3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +97,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.ranomd_db_filler">
+  <component name="RunManager" selected="Python.runner">
     <configuration name="db_wrapper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="RhythmBox" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -222,9 +212,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.runner" />
         <item itemvalue="Python.ranomd_db_filler" />
         <item itemvalue="Python.db_wrapper" />
-        <item itemvalue="Python.runner" />
         <item itemvalue="Python.init_db" />
         <item itemvalue="Python.models" />
       </list>

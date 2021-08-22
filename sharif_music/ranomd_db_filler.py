@@ -1,19 +1,22 @@
 import os
+import random
 from typing import List
-from random_word import RandomWords
 
 from sharif_music import utils
 from sharif_music.db_wrapper import DB
 from sharif_music.models import Music, File, Account, AccountType
-import random
-import os
-words_file = open("words", "r")
-words = words_file.readlines()
+
+with open("words", "r") as words_file:
+    words = words_file.readlines()
 current = 0
+
+
 def get_random_word():
     global current
     current += 1
     return words[current]
+
+
 def create_random_publishers():
     for i in range(10):
         account = Account(
@@ -25,7 +28,7 @@ def create_random_publishers():
             publisher=True,
             photo=None,
             description=get_random_word() + get_random_word() + get_random_word(),
-            email=f"{get_random_word()}@{get_random_word()}.com"
+            email=f"{get_random_word()}@{get_random_word()}.com",
         )
         db.insert_account(account)
 
@@ -38,17 +41,7 @@ def get_random_publisher() -> Account:
     return get_publishers()[random.randint(0, len(get_publishers()) - 1)]
 
 
-genres = [
-    "Pop",
-    "Rap",
-    "Rock",
-    "Blue",
-    "Danbooli",
-    "Indie",
-    "Classic",
-    "Pulp",
-    "Jazz"
-]
+genres = ["Pop", "Rap", "Rock", "Blue", "Danbooli", "Indie", "Classic", "Pulp", "Jazz"]
 
 
 def get_random_genre() -> str:
@@ -56,11 +49,10 @@ def get_random_genre() -> str:
 
 
 def add_musics():
-    path_to_musics_folder = '/home/smss/Downloads/Telegram Desktop/'
+    path_to_musics_folder = "/home/smss/Downloads/Telegram Desktop/"
     for filename in os.listdir(path_to_musics_folder):
         if filename.endswith(".mp3"):
             full_path = os.path.join(path_to_musics_folder, filename)
-            name = filename
             music_name = filename.split(".mp3")[0]
             pub = get_random_publisher()
             music_id = utils.gen_id()
@@ -76,7 +68,7 @@ def add_musics():
                 uid=music_id,
                 file=file,
                 quality=128 if random.random() >= 0.5 else 320,
-                genera=get_random_genre()
+                genera=get_random_genre(),
             )
             db.insert_music(music)
         else:
@@ -84,8 +76,8 @@ def add_musics():
 
 
 db = DB()
-print('init db')
+print("init db")
 create_random_publishers()
-print('publisheds added')
+print("publisheds added")
 add_musics()
-print('done')
+print("done")
