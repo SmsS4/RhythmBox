@@ -410,7 +410,7 @@ class DB:
 
     def did_pay(self, customer_addr: str):
         cur_balance = self.get_balance(self.public_key)
-        c_balance = self.get_balance(customer_addr)
+        c_balance =  self.get_balance(customer_addr)
         # our balance has increased and the user balance has decreased (gas fees ok)
         if cur_balance >= self.our_balance + self.premium_cost and c_balance <= self.previous_balances[customer_addr] - self.premium_cost:
             self.previous_balances[customer_addr] = c_balance
