@@ -1,4 +1,5 @@
 
+
 $(document).ready(function(){
     $("#name").val(localStorage.getItem('name'));
     $("#description").val(localStorage.getItem('description'));
@@ -151,7 +152,7 @@ function edit(){
     localStorage.setItem('name', name);
     localStorage.setItem('description', description);
     req_publisher = String($("#req_pub").is(':checked'))
-    req_premium = String($("#req_pre").is(':checked'))
+    req_premium = $("#req_pre").val()
     $.post(
         '/edit',
         {

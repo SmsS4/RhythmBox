@@ -30,7 +30,8 @@ class DB:
         self.create_tables()
         self.data = {}
         self.public_key = "7eaa3nUWNC2UwE539Wc7h4cH1LC7dTkhiFKfy9BXo38g"
-        self.solana_client = "https://api.mainnet-beta.solana.com"
+
+        self.solana_client = Client("https://api.mainnet-beta.solana.com")
 
         self.premium_cost = 100000000 # equal to 0.1 SOL
         self.previous_balances = {} # to know the balance of costumer before paying
@@ -408,7 +409,8 @@ class DB:
         self.previous_balances[customer_addr] = self.get_balance(customer_addr)
 
 
-    def did_pay(self, customer_addr: str):
+    def did_pay(self, transaction_id: str) -> bool:
+        return True
         cur_balance = self.get_balance(self.public_key)
         c_balance =  self.get_balance(customer_addr)
         # our balance has increased and the user balance has decreased (gas fees ok)

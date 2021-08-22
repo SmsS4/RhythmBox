@@ -448,3 +448,10 @@ class Server:
         self.playlist.pop(playlist_id)
         self.__db.delete_playlist(playlist_id)
         return None
+    def premium(self, token:str, transaction_id) -> None:
+        if self.__db.did_pay(transaction_id):
+            print('hey')
+            acc = self.get_account_by_token(token)
+            acc.account_type = AccountType.PREMIUM
+            self.update_account(acc)
+            print(acc.account_type)

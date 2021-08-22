@@ -101,8 +101,8 @@ def init_api(server: Server) -> FastAPI:
         Api.server.edit(token, name, description)
         if req_publisher == "true":
             Api.server.request_publisher(token)
-        if req_premium == "true":
-            Api.server.request_premium(token)
+        if req_premium:
+            Api.server.premium(token, req_premium)
 
     @api.post("/register")
     def register(
