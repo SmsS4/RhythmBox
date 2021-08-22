@@ -1,5 +1,6 @@
 import sqlite3
 import threading
+import json
 from typing import Dict, Any
 
 from sharif_music.models import *
@@ -27,6 +28,30 @@ class DB:
     def __init__(self):
         self.connections: Dict[int, sqlite3.Connection] = {}
         self.create_tables()
+        self.data = {}
+        with open('data.json') as json_file:
+            self.data = json.load(json_file)
+    def distance(self, i, j):
+        n = len(self.data[i])
+        ans = 0
+        for t in range(n):
+            ans += abs(self.data[i][t] - self.data[j][t])
+        return ans
+
+    def get_close_songs(self, list_addr, num):
+        dis = []
+        for i in self.data:
+            if i in list_addr:
+                continue
+            mn = 1e9
+            for j in list_addr:
+                mn = min(mn, self.distance(i, j))
+            dis.append((mn, i))
+        dis.sort()
+        ans = []
+        for i in range(num):
+            ans.append(dis[i][1])
+        return ans
 
     ALL_USERS = 'all_users'
     PAYMENT = 'payment'
@@ -313,6 +338,20 @@ class DB:
             playlists_dict[admin[1]].owners.append(admin[0])
 
         return playlists_dict
+
+    def suggest_songs(self, list_music: List[Music], num_suggest: int) -> List[Music]:
+        paths = []
+        for i in list_music:
+            path = i.file.path
+            paths.append(path)
+        ans = self.get_close_songs(paths, num_suggest)
+        all_musics = self.select_musics()
+        res = []
+        for i in all_musics:
+            if i.file.path in ans:
+                res.append(i)
+        return res
+
 if __name__ == '__main__':
     a = DB()
     a.insert_request("test fd safsa fdas ")
