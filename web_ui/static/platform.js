@@ -52,6 +52,15 @@ function set_add_remove_pl(){
 }
 
 function play_music(music_id_to_play) {
+    $.get('listen', {token:localStorage.getItem('token'), music_id:music_id_to_play},
+        function(data){
+
+
+    }).fail(function(){
+        console.log("error");
+        toast.error("Unknown error");
+
+    });
     console.log(music_id_to_play);
     for (var j = 0; j < musics.length; j++){
         if(musics[j]["id"] == music_id_to_play || musics[j]["uid"] == music_id_to_play){
