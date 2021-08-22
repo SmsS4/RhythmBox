@@ -31,12 +31,17 @@ class Server:
 
     def share(self, playlist_id: int, username: str):
         self.shared[
-            self.get_account_by_username(username).id
+            self.get_account_by_username(username).id  # pytype:disable=attribute-error
         ].append(playlist_id)
 
     def shared_with_me(self, token: str) -> List[PlaylistWeb]:
-        return [PlaylistWeb(id=playlist_id, name=self.playlist[playlist_id].name) for playlist_id in
-                self.shared[self.get_account_by_token(token).id] if playlist_id in self.playlist]
+        return [
+            PlaylistWeb(id=playlist_id, name=self.playlist[playlist_id].name)
+            for playlist_id in self.shared[
+                self.get_account_by_token(token).id  # pytype:disable=attribute-error
+            ]
+            if playlist_id in self.playlist
+        ]
 
     def get_file_path(self, file_id: int) -> File:
         return self.files[file_id]
@@ -89,14 +94,14 @@ class Server:
         self.accounts.append(
             Account(
                 id=1,
-                username='test',
-                password='test',
-                name='name',
+                username="test",
+                password="test",
+                name="name",
                 account_type=AccountType.PREMIUM,
                 publisher=True,
                 photo=None,
-                description='description',
-                email='smss@chmail.ir'
+                description="description",
+                email="smss@chmail.ir",
             )
         )
         # self.accounts.append(
@@ -136,7 +141,7 @@ class Server:
         return self.token_to_account.get(token, None)
 
     def create_account(
-            self, username: str, password: str, email: str, name: str
+        self, username: str, password: str, email: str, name: str
     ) -> Tuple[str, bool]:
         if self.get_account_by_username(username):
             return "Username already taken", False
@@ -148,25 +153,19 @@ class Server:
             account_type=AccountType.FREE,
             publisher=False,
             photo=None,
-            description='',
+            description="",
             email=email,
         )
         self.accounts.append(account)
         self.__db.insert_account(account)
         publishers_playlist = PlayList(
-            uid=account.id,
-            musics=[],
-            name="Followings",
-            owners=[account.username]
+            uid=account.id, musics=[], name="Followings", owners=[account.username]
         )
         self.add_playlist_to_db(publishers_playlist)
         self.playlist[publishers_playlist.uid] = publishers_playlist
 
         discover_playlist = PlayList(
-            uid=account.id+1,
-            musics=[],
-            name="Discover",
-            owners=[account.username]
+            uid=account.id + 1, musics=[], name="Discover", owners=[account.username]
         )
         self.add_playlist_to_db(discover_playlist)
         self.playlist[discover_playlist.uid] = discover_playlist
@@ -222,46 +221,62 @@ class Server:
         account = self.get_account_by_token(token)
         self.__db.insert_request(f"{account.id}$pre")
 
-    def add_music(self, token: str, name: str, uploaded_file: UploadFile, genera: str) -> bool:
+    def add_music(
+        self, token: str, name: str, uploaded_file: UploadFile, genera: str
+    ) -> bool:
         user = self.get_account_by_token(token)
-        if not user.publisher:
+        if not user.publisher:  # pytype:disable=attribute-error
             return False
-        music = Music(
+        music = Music(  # pytype:disable=wrong-arg-types
             name=name,
-            publisher_id=user.id,
+            publisher_id=user.id,  # pytype:disable=attribute-error
             uid=utils.gen_id(),
             file=None,
             quality=128,
-            genera=genera
+            genera=genera,
         )
         file = self.upload_file(uploaded_file, music.uid)
         music.file = file
         self.__db.insert_music(music)
         self.files[file.id] = file
         self.musics[music.uid] = music
-        for follower_username in self.followers[user.id]:
-            follower = self.get_account_by_username(follower_username)
-            self.playlist[follower.id].musics.append(music)
-            self.update_playlist_in_db(self.playlist[follower.id])
+        for follower_username in self.followers[
+            user.id  # pytype:disable=attribute-error
+        ]:
+            follower = self.get_account_by_username(
+                follower_username
+            )  # pytype:disable=attribute-error
+            self.playlist[follower.id].musics.append(  # pytype:disable=attribute-error
+                music
+            )
+            self.update_playlist_in_db(
+                self.playlist[follower.id]  # pytype:disable=attribute-error
+            )
         return True
 
     def get_music(self, uid: int) -> Music:
         return self.musics[uid]
 
     def serach(self, token: str, string: str) -> Dict[str, List[WebResult]]:
-        if string.startswith('sharedpl$') :
+        if string.startswith("sharedpl$"):
             name = string.split("sharedpl$")[1]
             print(name)
             print(len(name))
             print(self.playlist)
             return {
-                'Shared Playlist': [PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if name == self.playlist[playlist_id].name]
+                "Shared Playlist": [
+                    PlaylistWeb(playlist_id, self.playlist[playlist_id].name)
+                    for playlist_id in self.playlist
+                    if name == self.playlist[playlist_id].name
+                ]
             }
         user = self.get_account_by_token(token)
         result = {
-            'artists': self.search_artists(string),
-            'musics': self.search_musics(string, user.account_type == AccountType.PREMIUM),
-            'playlists': self.search_playlists(string)
+            "artists": self.search_artists(string),
+            "musics": self.search_musics(
+                string, user.account_type == AccountType.PREMIUM
+            ),
+            "playlists": self.search_playlists(string),
         }
         return result
 
@@ -269,24 +284,45 @@ class Server:
         return token in self.token_to_account
 
     def search_artists(self, string: str) -> List[PublisherWeb]:
-        return [PublisherWeb(account.username, account.name) for account in self.accounts if
-                string in account.name and account.publisher]
+        return [
+            PublisherWeb(  # pytype:disable=wrong-arg-types
+                account.username, account.name
+            )
+            for account in self.accounts
+            if string in account.name and account.publisher
+        ]
 
     def follow(self, token: str, username: str) -> None:
-        self.followers[self.get_account_by_username(username).id].append(self.get_account_by_token(token).username)
+        self.followers[
+            self.get_account_by_username(username).id  # pytype:disable=attribute-error
+        ].append(
+            self.get_account_by_token(token).username  # pytype:disable=attribute-error
+        )
         # todo db
 
     def checkfollow(self, token: str, username: str) -> bool:
-        return self.get_account_by_token(token).username in self.followers[self.get_account_by_username(username).id]
+        return (
+            self.get_account_by_token(token).username  # pytype:disable=attribute-error
+            in self.followers[
+                self.get_account_by_username(  # pytype:disable=attribute-error
+                    username
+                ).id
+            ]
+        )
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
-        return [MusicWeb(music.uid, music.name, music.quality, music.genera) for music in self.musics.values() if
-                string in music.name and (music.quality == 128 or high_quality)]
+        return [
+            MusicWeb(music.uid, music.name, music.quality, music.genera)
+            for music in self.musics.values()
+            if string in music.name and (music.quality == 128 or high_quality)
+        ]
 
     def search_playlists(self, string: str) -> List[PlaylistWeb]:
         return [
-            PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
-            string in self.playlist[playlist_id].name and self.playlist[playlist_id].name not in("Followings", "Discover")
+            PlaylistWeb(playlist_id, self.playlist[playlist_id].name)
+            for playlist_id in self.playlist
+            if string in self.playlist[playlist_id].name
+            and self.playlist[playlist_id].name not in ("Followings", "Discover")
         ]
 
     def add_playlist_to_db(self, playlist: PlayList):
@@ -312,7 +348,11 @@ class Server:
             uid,
             [],
             name,
-            [self.get_account_by_token(token).username]
+            [
+                self.get_account_by_token(  # pytype:disable=attribute-error
+                    token
+                ).username
+            ],
         )
         self.add_playlist_to_db(self.playlist[uid])
 
@@ -327,7 +367,9 @@ class Server:
         """
         return self.playlist[uid]
 
-    def add_owner_to_playlist(self, token: str, uid: int, username: str) -> Optional[str]:
+    def add_owner_to_playlist(
+        self, token: str, uid: int, username: str
+    ) -> Optional[str]:
         """
         add manager to playlist
         Args:
@@ -337,21 +379,30 @@ class Server:
         Returns:
 
         """
-        if self.get_account_by_token(token).username not in self.playlist[uid].owners:
+        if (
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username
+            not in self.playlist[uid].owners
+        ):
             return "Only managers can add new manager"
         if username in self.playlist[uid].owners:
             return "Username is already manager"
         if self.get_account_by_username(username) is None:
             return "Username not found"
-        self.playlist[uid].owners.append(self.get_account_by_username(username).username)
+        self.playlist[uid].owners.append(
+            self.get_account_by_username(username).username
+        )
         self.update_playlist_in_db(self.playlist[uid])
         return None
 
     def add_music_to_playlist(
-            self, token: str, playlist_uid: int, music_uid: int
+        self, token: str, playlist_uid: int, music_uid: int
     ) -> Optional[str]:
         playlist = self.playlist[playlist_uid]
-        if self.get_account_by_token(token).username not in playlist.owners:
+        if (
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username not in playlist.owners
+        ):
             return "User is not manager of playlist"
         if self.musics[music_uid] not in playlist.musics:
             playlist.musics.append(self.musics[music_uid])
@@ -360,10 +411,13 @@ class Server:
         return "Music is already in playlist"
 
     def remove_music_from_playlist(
-            self, token: str, playlist_uid: int, music_uid: int
+        self, token: str, playlist_uid: int, music_uid: int
     ) -> Optional[str]:
         playlist = self.playlist[playlist_uid]
-        if self.get_account_by_token(token).username not in playlist.owners:
+        if (
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username not in playlist.owners
+        ):
             return "User is not manager of playlist"
         if self.musics[music_uid] in playlist.musics:
             playlist.musics.remove(self.musics[music_uid])
@@ -373,8 +427,9 @@ class Server:
 
     def get_my_playlists(self, username: str) -> List[PlaylistWeb]:
         return [
-            PlaylistWeb(playlist_id, self.playlist[playlist_id].name) for playlist_id in self.playlist if
-            username in self.playlist[playlist_id].owners
+            PlaylistWeb(playlist_id, self.playlist[playlist_id].name)
+            for playlist_id in self.playlist
+            if username in self.playlist[playlist_id].owners
         ]
 
     def remove_playlist(self, token: str, playlist_id: int) -> Optional[str]:

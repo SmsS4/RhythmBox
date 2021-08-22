@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60321cc1-5836-4e53-81f9-bc3d7efeaad3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.pylintrc" beforeDir="false" afterPath="$PROJECT_DIR$/.pylintrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sharif_music/db_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/db_wrapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sharif_music/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sharif_music/ranomd_db_filler.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/ranomd_db_filler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sharif_music/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sharif_music/webapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/webapi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/platform.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/platform.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/platform.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/platform.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/profile.css" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/profile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/templates/platform.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/templates/platform.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/templates/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

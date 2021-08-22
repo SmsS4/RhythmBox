@@ -1,5 +1,5 @@
 """logger for project."""
-from logging import Formatter, DEBUG
+from logging import Formatter
 from logging import getLogger
 from logging import INFO
 from logging import Logger
