@@ -53,11 +53,12 @@
 # '
 # """
 
-#r = requests.post(req)
-#print(r)
+# r = requests.post(req)
+# print(r)
 
 import solana
 from solana.rpc.api import Client
+
 str = "http://192.168.1.88:8899"
 str2 = "https://api.devnet.solana.com"
 str3 = "https://api.mainnet-beta.solana.com"
@@ -66,6 +67,6 @@ solana_client = Client(str3)
 
 x = solana_client.get_balance("7eaa3nUWNC2UwE539Wc7h4cH1LC7dTkhiFKfy9BXo38g")
 print(x)
-print(x['result']['value'])
+print(x["result"]["value"])
 
 8988016840

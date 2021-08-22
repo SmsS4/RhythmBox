@@ -61,10 +61,12 @@ def init_api(server: Server) -> FastAPI:
     @api.get("/profile/get_account")
     def get_account(token: str) -> Optional[Account]:
         return Api.server.get_account_by_token(token)
+
     @api.get("/listen")
-    def listen(token:str, music_id:int):
+    def listen(token: str, music_id: int):
         print(token, music_id)
         Api.server.listen(token, music_id)
+
     @api.get("/music/{music_id}")
     def get_music(music_id: int):
         music = Api.server.get_music(music_id)

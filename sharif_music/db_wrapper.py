@@ -22,16 +22,17 @@ class DB:
         if thread_id not in self.connections:
             self.connections[thread_id] = sqlite3.connect(DB.PATH)
         return self.connections[thread_id]
+
     def is_valid_transaction(self, tx_hash):
         x = self.solana_client.get_confirmed_transaction(tx_hash)
-        if 'result' not in x:
+        if "result" not in x:
             return False
-        y = x['result']['transaction']['message']['accountKeys']
+        y = x["result"]["transaction"]["message"]["accountKeys"]
 
         if y[1] != self.public_key:
             return False
-        change = x['result']['meta']['preBalances']
-        change2 = x['result']['meta']['postBalances']
+        change = x["result"]["meta"]["preBalances"]
+        change2 = x["result"]["meta"]["postBalances"]
         delta = change2[1] - change[1]
         if delta >= self.premium_cost:
             if tx_hash in self.previous_hashs:
@@ -39,8 +40,9 @@ class DB:
             self.previous_hashs.append(tx_hash)
             return True
         return False
+
     def get_balance(self, x):
-        return self.solana_client.get_balance(x)['result']['value']
+        return self.solana_client.get_balance(x)["result"]["value"]
 
     def __init__(self):
         self.connections: Dict[int, sqlite3.Connection] = {}
@@ -49,12 +51,12 @@ class DB:
         self.public_key = "7eaa3nUWNC2UwE539Wc7h4cH1LC7dTkhiFKfy9BXo38g"
         self.solana_client = Client("https://api.mainnet-beta.solana.com")
 
-        self.premium_cost = 100000000 # equal to 0.1 SOL
+        self.premium_cost = 100000000  # equal to 0.1 SOL
         self.previous_hashs = []
 
-
-        with open('data.json') as json_file:
+        with open("data.json") as json_file:
             self.data = json.load(json_file)
+
     def distance(self, i, j):
         n = len(self.data[i])
         ans = 0
@@ -222,7 +224,7 @@ class DB:
                 "is_account_premium": bool_to_str(
                     account.account_type == AccountType.PREMIUM
                 ),
-                "is_publisher":bool_to_str(account.publisher),
+                "is_publisher": bool_to_str(account.publisher),
             },
         )
         connection.commit()
@@ -420,7 +422,6 @@ class DB:
             if i.file.path in ans:
                 res.append(i)
         return res
-
 
     def did_pay(self, tx_hash: str) -> bool:
         return self.is_valid_transaction(tx_hash)

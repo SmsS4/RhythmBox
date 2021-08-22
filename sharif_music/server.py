@@ -30,12 +30,11 @@ class Server:
         self.shared: Dict[int, List[int]] = collections.defaultdict(list)
         self.listened: Dict[str, List[Music]] = collections.defaultdict(list)
 
-
     def listen(self, token: str, music_id: int):
         self.listened[token].append(self.get_music(music_id))
-        discover_id = self.get_account_by_token(token).id+1
+        discover_id = self.get_account_by_token(token).id + 1
         self.playlist[discover_id].musics = self.__db.suggest_songs(
-            list(self.listened[token]),10
+            list(self.listened[token]), 10
         )
         self.update_playlist_in_db(self.playlist[discover_id])
 
@@ -151,7 +150,7 @@ class Server:
         return self.token_to_account.get(token, None)
 
     def create_account(
-            self, username: str, password: str, email: str, name: str
+        self, username: str, password: str, email: str, name: str
     ) -> Tuple[str, bool]:
         if self.get_account_by_username(username):
             return "Username already taken", False
@@ -232,7 +231,7 @@ class Server:
         self.__db.insert_request(f"{account.id}$pre")
 
     def add_music(
-            self, token: str, name: str, uploaded_file: UploadFile, genera: str
+        self, token: str, name: str, uploaded_file: UploadFile, genera: str
     ) -> bool:
         user = self.get_account_by_token(token)
         if not user.publisher:  # pytype:disable=attribute-error
@@ -313,12 +312,12 @@ class Server:
 
     def checkfollow(self, token: str, username: str) -> bool:
         return (
-                self.get_account_by_token(token).username  # pytype:disable=attribute-error
-                in self.followers[
-                    self.get_account_by_username(  # pytype:disable=attribute-error
-                        username
-                    ).id
-                ]
+            self.get_account_by_token(token).username  # pytype:disable=attribute-error
+            in self.followers[
+                self.get_account_by_username(  # pytype:disable=attribute-error
+                    username
+                ).id
+            ]
         )
 
     def search_musics(self, string: str, high_quality: bool) -> List[MusicWeb]:
@@ -333,7 +332,7 @@ class Server:
             PlaylistWeb(playlist_id, self.playlist[playlist_id].name)
             for playlist_id in self.playlist
             if string in self.playlist[playlist_id].name
-               and self.playlist[playlist_id].name not in ("Followings", "Discover")
+            and self.playlist[playlist_id].name not in ("Followings", "Discover")
         ]
 
     def add_playlist_to_db(self, playlist: PlayList):
@@ -380,7 +379,7 @@ class Server:
         return self.playlist[uid]
 
     def add_owner_to_playlist(
-            self, token: str, uid: int, username: str
+        self, token: str, uid: int, username: str
     ) -> Optional[str]:
         """
         add manager to playlist
@@ -392,9 +391,9 @@ class Server:
 
         """
         if (
-                not self.get_account_by_token(token)
-                or self.get_account_by_token(token).username
-                not in self.playlist[uid].owners
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username
+            not in self.playlist[uid].owners
         ):
             return "Only managers can add new manager"
         if username in self.playlist[uid].owners:
@@ -408,12 +407,12 @@ class Server:
         return None
 
     def add_music_to_playlist(
-            self, token: str, playlist_uid: int, music_uid: int
+        self, token: str, playlist_uid: int, music_uid: int
     ) -> Optional[str]:
         playlist = self.playlist[playlist_uid]
         if (
-                not self.get_account_by_token(token)
-                or self.get_account_by_token(token).username not in playlist.owners
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username not in playlist.owners
         ):
             return "User is not manager of playlist"
         if self.musics[music_uid] not in playlist.musics:
@@ -423,12 +422,12 @@ class Server:
         return "Music is already in playlist"
 
     def remove_music_from_playlist(
-            self, token: str, playlist_uid: int, music_uid: int
+        self, token: str, playlist_uid: int, music_uid: int
     ) -> Optional[str]:
         playlist = self.playlist[playlist_uid]
         if (
-                not self.get_account_by_token(token)
-                or self.get_account_by_token(token).username not in playlist.owners
+            not self.get_account_by_token(token)
+            or self.get_account_by_token(token).username not in playlist.owners
         ):
             return "User is not manager of playlist"
         if self.musics[music_uid] in playlist.musics:
@@ -448,9 +447,10 @@ class Server:
         self.playlist.pop(playlist_id)
         self.__db.delete_playlist(playlist_id)
         return None
-    def premium(self, token:str, transaction_id) -> None:
+
+    def premium(self, token: str, transaction_id) -> None:
         if self.__db.did_pay(transaction_id):
-            print('hey')
+            print("hey")
             acc = self.get_account_by_token(token)
             acc.account_type = AccountType.PREMIUM
             self.update_account(acc)
