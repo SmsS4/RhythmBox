@@ -24,6 +24,8 @@ class DB:
         return self.connections[thread_id]
     def is_valid_transaction(self, tx_hash):
         x = self.solana_client.get_confirmed_transaction(tx_hash)
+        if 'result' not in x:
+            return False
         y = x['result']['transaction']['message']['accountKeys']
 
         if y[1] != self.public_key:
@@ -220,7 +222,7 @@ class DB:
                 "is_account_premium": bool_to_str(
                     account.account_type == AccountType.PREMIUM
                 ),
-                "is_publisher": account.publisher,
+                "is_publisher":bool_to_str(account.publisher),
             },
         )
         connection.commit()
@@ -255,7 +257,7 @@ class DB:
                 account_type=AccountType.PREMIUM
                 if account[6] == "yes"
                 else AccountType.FREE,
-                publisher=account[7],
+                publisher=True if account[7] == "yes" else False,
                 photo=files.get(account[0], None),
             )
             for account in self.select_all(self.ALL_USERS)
@@ -339,10 +341,10 @@ class DB:
                 {"music_id": music.uid, "playlist_id": playlist.uid},
             )
         connection.cursor().execute(
-            f"INSERT INTO {self.PLAYLIST} VALUES(:playlist_id, :creator_id)",
+            f"INSERT INTO {self.PLAYLIST} VALUES(:playlist_id, :name)",
             {
                 "playlist_id": playlist.uid,
-                "creator_id": playlist.owners[0],
+                "name": playlist.name,
             },
         )
         connection.commit()
