@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eea65973-ae63-465c-b22e-e5fd7a1c1ccc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/RhythmBox.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/Sharifmusic2.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/db_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/db_wrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sharif_music/webapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/sharif_music/webapi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/static/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/static/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_ui/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_ui/templates/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,9 +37,31 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.ranomd_db_filler">
+    <configuration name="ranomd_db_filler" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Sharifmusic2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sharif_music" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sharif_music/ranomd_db_filler.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="runner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Sharifmusic2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -67,6 +86,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.runner" />
+        <item itemvalue="Python.ranomd_db_filler" />
       </list>
     </recent_temporary>
   </component>
@@ -80,5 +100,16 @@
       <updated>1629654554026</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
