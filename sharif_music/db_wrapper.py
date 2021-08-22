@@ -3,6 +3,7 @@ import sqlite3
 import threading
 import json
 from typing import Dict, Any, List
+from solana.rpc.api import Client
 
 from sharif_music.models import File, Account, AccountType, Music, PlayList
 
@@ -21,11 +22,20 @@ class DB:
         if thread_id not in self.connections:
             self.connections[thread_id] = sqlite3.connect(DB.PATH)
         return self.connections[thread_id]
+    def get_balance(self, x):
+        return self.solana_client.get_balance(x)['result']['value']
 
     def __init__(self):
         self.connections: Dict[int, sqlite3.Connection] = {}
         self.create_tables()
         self.data = {}
+        self.public_key = "7eaa3nUWNC2UwE539Wc7h4cH1LC7dTkhiFKfy9BXo38g"
+        self.solana_client = "https://api.mainnet-beta.solana.com"
+
+        self.premium_cost = 100000000 # equal to 0.1 SOL
+        self.previous_balances = {} # to know the balance of costumer before paying
+        self.our_balance = self.get_balance(self.public_key)
+
         with open('data.json') as json_file:
             self.data = json.load(json_file)
     def distance(self, i, j):
@@ -393,3 +403,19 @@ class DB:
             if i.file.path in ans:
                 res.append(i)
         return res
+
+    def initialize_pay(self, customer_addr: str):
+        self.previous_balances[customer_addr] = self.get_balance(customer_addr)
+
+
+    def did_pay(self, customer_addr: str):
+        cur_balance = self.get_balance(self.public_key)
+        c_balance = self.get_balance(customer_addr)
+        # our balance has increased and the user balance has decreased (gas fees ok)
+        if cur_balance >= self.our_balance + self.premium_cost and c_balance <= self.previous_balances[customer_addr] - self.premium_cost:
+            self.previous_balances[customer_addr] = c_balance
+            self.our_balance = cur_balance
+            return True
+        self.previous_balances[customer_addr] = c_balance
+        self.our_balance = cur_balance
+        return False
