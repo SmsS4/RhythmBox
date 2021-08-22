@@ -13,8 +13,8 @@ def bool_to_str(condition) -> str:
     return "no"
 
 
-class DB:
-    PATH = f"/tmp/shm{20+0*random.randint(0, 10000000)}.db"  #
+class DB:  # pylint: disable=too-many-public-methods
+    PATH = f"/tmp/shm{26+0*random.randint(0, 10000000)}.db"  #
 
     def get_connection(self) -> sqlite3.Connection:
         thread_id = threading.get_ident()
@@ -26,8 +26,9 @@ class DB:
         self.connections: Dict[int, sqlite3.Connection] = {}
         self.create_tables()
         self.data = {}
-        with open('data.json') as json_file:
+        with open("data.json") as json_file:
             self.data = json.load(json_file)
+
     def distance(self, i, j):
         n = len(self.data[i])
         ans = 0
@@ -314,10 +315,10 @@ class DB:
                 {"music_id": music.uid, "playlist_id": playlist.uid},
             )
         connection.cursor().execute(
-            f"INSERT INTO {self.PLAYLIST} VALUES(:playlist_id, :creator_id)",
+            f"INSERT INTO {self.PLAYLIST} VALUES(:playlist_id, :name)",
             {
                 "playlist_id": playlist.uid,
-                "creator_id": playlist.owners[0],
+                "name": playlist.name,
             },
         )
         connection.commit()
@@ -393,3 +394,9 @@ class DB:
             if i.file.path in ans:
                 res.append(i)
         return res
+
+
+if __name__ == "__main__":
+    from pprint import pprint
+
+    pprint(DB().select_playlists())

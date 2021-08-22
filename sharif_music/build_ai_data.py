@@ -1,7 +1,9 @@
-import os
-import librosa
 import json
-dir = '/Users/sasa/Desktop/all_mus'
+import os
+
+import librosa
+
+dir = "/home/smss/Downloads/all_mus"  # pylint:disable=redefined-builtin
 track = []
 for root, dirs, files in os.walk(dir):
     for file in files:
@@ -13,16 +15,15 @@ for root, dirs, files in os.walk(dir):
 #     print(track[i])
 n = len(track)
 means = {}
-for id in range(n):
+for id in range(n):  # pylint:disable=redefined-builtin
     print(id, "out of", n)
     x, sr = librosa.load(track[id])
     mfcc = librosa.feature.mfcc(x, sr=sr)
 
     row_means = mfcc.mean(axis=1)
     print(row_means.shape)
-    #print(row_means)
+    # print(row_means)
     means[track[id]] = row_means.tolist()
 
-with open('data.json', 'w') as fp:
+with open("data.json", "w") as fp:
     json.dump(means, fp)
-

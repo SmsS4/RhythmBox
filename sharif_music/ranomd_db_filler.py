@@ -49,30 +49,32 @@ def get_random_genre() -> str:
 
 
 def add_musics():
-    path_to_musics_folder = "/home/smss/Downloads/Telegram Desktop/"
-    for filename in os.listdir(path_to_musics_folder):
-        if filename.endswith(".mp3"):
-            full_path = os.path.join(path_to_musics_folder, filename)
-            music_name = filename.split(".mp3")[0]
-            pub = get_random_publisher()
-            music_id = utils.gen_id()
-            file = File(
-                owner_id=music_id,
-                id=utils.gen_id(),
-                mime="audio/mp3",
-                path=full_path,
-            )
-            music = Music(
-                name=music_name,
-                publisher_id=pub.id,
-                uid=music_id,
-                file=file,
-                quality=128 if random.random() >= 0.5 else 320,
-                genera=get_random_genre(),
-            )
-            db.insert_music(music)
-        else:
-            continue
+    path_to_musics_folder = "/home/smss/Downloads/all_mus/"
+    for root, dirs, files in os.walk(path_to_musics_folder):
+        for filename in files:
+            if filename.endswith(".mp3"):
+                full_path = os.path.join(root, filename)
+                print(filename, full_path)
+                music_name = filename.split(".mp3")[0]
+                pub = get_random_publisher()
+                music_id = utils.gen_id()
+                file = File(
+                    owner_id=music_id,
+                    id=utils.gen_id(),
+                    mime="audio/mp3",
+                    path=full_path,
+                )
+                music = Music(
+                    name=music_name,
+                    publisher_id=pub.id,
+                    uid=music_id,
+                    file=file,
+                    quality=128 if random.random() >= 0.5 else 320,
+                    genera=get_random_genre(),
+                )
+                db.insert_music(music)
+            else:
+                continue
 
 
 db = DB()
